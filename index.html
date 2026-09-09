@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AutoMeca Lab - Guía Interactiva de Mecánica y Averías</title>
+
+  <!-- Metadatos PWA y Mobile -->
+  <meta name="description" content="Aprende interactivamente cómo funciona cada componente de coches de combustión, coches eléctricos y motos urbanas. Diagnóstico de averías y consejos de cuidado.">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AutoMeca">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            appDark: '#090d16',
+            appCard: '#0f172a',
+            appBorder: '#1e293b'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Estilos personalizados y PWA Bottom Sheet -->
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body class="bg-appDark text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- CABECERA PRINCIPAL / APP BAR -->
+  <header class="sticky top-0 z-30 glass-panel border-b border-slate-800/80 px-4 py-3 sm:px-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Logotipo e Identidad -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <svg class="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-black text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-400 bg-clip-text text-transparent">AutoMeca Lab</h1>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 hidden sm:inline-block">PWA Offline</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Anatomía técnica, averías comunes y guía de mantenimiento</p>
+        </div>
+      </div>
+
+      <!-- Acciones de Cabecera: Diagnóstico Rápido y Botón Instalar PWA -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Botón Asistente de Diagnóstico -->
+        <button id="btnToggleDiagnosis" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs sm:text-sm font-medium text-amber-300 border border-amber-500/30 transition-all active:scale-95">
+          <span>⚠️</span>
+          <span class="hidden md:inline">Buscador de</span> <span>Averías</span>
+        </button>
+
+        <!-- Botón de Instalación PWA (se muestra dinámicamente) -->
+        <button id="btnInstallPwa" class="hidden btn-pwa-install flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>Instalar App</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-4 sm:px-6 sm:py-6 flex flex-col gap-6">
+
+    <!-- SELECTOR DE VEHÍCULO (Tabs estilo Automotive Cockpit) -->
+    <section aria-label="Selección de tipo de vehículo">
+      <div class="grid grid-cols-3 gap-2 sm:gap-4 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 shadow-inner">
+        
+        <!-- Tab 1: Combustión / Gas -->
+        <button id="tab-combustion" data-vehicle="combustion" class="vehicle-tab group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2.5 py-2.5 px-2 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 active:scale-95">
+          <span class="text-xl sm:text-2xl transition-transform group-hover:scale-110">⛽</span>
+          <div class="text-center sm:text-left">
+            <div class="tab-title text-slate-300">Combustión / Gas</div>
+            <div class="text-[10px] text-slate-500 font-normal hidden md:block">Térmico, Inyección y Caja</div>
+          </div>
+        </button>
+
+        <!-- Tab 2: Eléctrico (EV) -->
+        <button id="tab-electric" data-vehicle="electric" class="vehicle-tab group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2.5 py-2.5 px-2 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 active:scale-95">
+          <span class="text-xl sm:text-2xl transition-transform group-hover:scale-110">⚡</span>
+          <div class="text-center sm:text-left">
+            <div class="tab-title text-slate-300">Coche Eléctrico (EV)</div>
+            <div class="text-[10px] text-slate-500 font-normal hidden md:block">Batería 400V, Inversor y Regen</div>
+          </div>
+        </button>
+
+        <!-- Tab 3: Moto Urbana -->
+        <button id="tab-moto" data-vehicle="moto" class="vehicle-tab group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2.5 py-2.5 px-2 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 active:scale-95">
+          <span class="text-xl sm:text-2xl transition-transform group-hover:scale-110">🛵</span>
+          <div class="text-center sm:text-left">
+            <div class="tab-title text-slate-300">Moto de Uso Diario</div>
+            <div class="text-[10px] text-slate-500 font-normal hidden md:block">4T, Cadena, CVT y Horquilla</div>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- BANNER INFORMATIVO DEL VEHÍCULO ACTIVO -->
+    <section id="vehicleBanner" class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 border-l-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span id="vehicleIcon" class="text-2xl">⛽</span>
+          <h2 id="vehicleTitle" class="text-lg sm:text-xl font-extrabold text-white">Coche de Combustión / Gas</h2>
+          <span id="vehicleCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-sky-400 font-mono font-bold">10 piezas</span>
+        </div>
+        <p id="vehicleDesc" class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-3xl">
+          Explora los componentes mecánicos clave del motor térmico, refrigeración, frenos y transmisión. Haz clic en los puntos interactivos para ver cómo funcionan y sus fallos.
+        </p>
+      </div>
+
+      <!-- Ayuda interactiva rápida -->
+      <div class="flex items-center gap-2 text-xs text-slate-400 bg-slate-900/60 px-3 py-2 rounded-lg border border-slate-800 self-start md:self-auto shrink-0">
+        <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+        <span>Pulsa los números en el esquema</span>
+      </div>
+    </section>
+
+    <!-- BARRA DE BÚSQUEDA Y FILTRADO POR SUBSISTEMAS -->
+    <section class="flex flex-col md:flex-row gap-3">
+      <!-- Buscador por texto predictivo -->
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Buscar pieza o síntoma (ej. 'humo blanco', 'alternador', 'pastillas', 'batería')..." 
+          class="w-full pl-10 pr-10 py-2.5 bg-slate-900/90 text-slate-100 placeholder-slate-500 rounded-xl border border-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-xs sm:text-sm transition-all"
+        >
+        <button id="btnClearSearch" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300">
+          ✕
+        </button>
+      </div>
+
+      <!-- Filtros de subsistemas (scroll horizontal en móviles) -->
+      <div id="categoryFilters" class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+        <button data-cat="all" class="cat-pill active whitespace-nowrap px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 transition-all">Todos</button>
+        <button data-cat="motor" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">⚙️ Motor</button>
+        <button data-cat="refrigeracion" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">❄️ Refrigeración</button>
+        <button data-cat="electrico" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">⚡ Eléctrico</button>
+        <button data-cat="frenos" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">🛑 Frenos</button>
+        <button data-cat="chasis" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">🛞 Chasis</button>
+        <button data-cat="transmision" class="cat-pill whitespace-nowrap px-3 py-2 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 transition-all">🕹️ Transmisión</button>
+      </div>
+    </section>
+
+    <!-- PANEL DESPLEGABLE DE DIAGNÓSTICO RÁPIDO DE AVERÍAS -->
+    <section id="diagnosisPanel" class="hidden glass-panel-glow rounded-2xl p-4 sm:p-5 border-amber-500/40">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div class="flex items-center gap-2 text-amber-400">
+          <span class="text-xl">⚠️</span>
+          <h3 class="font-bold text-sm sm:text-base">Diagnóstico Rápido: Síntomas Comunes de Avería</h3>
+        </div>
+        <button id="btnCloseDiagnosis" class="text-slate-400 hover:text-slate-200 text-lg leading-none p-1">✕</button>
+      </div>
+      <p class="text-xs text-slate-400 mb-3">
+        Selecciona el síntoma que percibe el conductor. El sistema resaltará automáticamente la pieza responsable en el esquema técnico:
+      </p>
+
+      <!-- Chips de Síntomas rápidos -->
+      <div id="symptomChipsContainer" class="flex flex-wrap gap-2">
+        <!-- Inyectado dinámicamente según el vehículo -->
+      </div>
+    </section>
+
+    <!-- ÁREA PRINCIPAL DEL ESQUEMA VECTORIAL INTERACTIVO -->
+    <section class="relative glass-panel rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col">
+      
+      <!-- Barra superior del visor con controles -->
+      <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span class="font-mono text-slate-300 font-semibold tracking-wide uppercase">Visor Técnico de Despiece</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-400">
+          <span class="hidden sm:inline">Puntos clicables:</span>
+          <span id="hotspotsVisibleCount" class="font-mono font-bold text-cyan-400">10</span>
+        </div>
+      </div>
+
+      <!-- Contenedor del Gráfico SVG Interactivo -->
+      <div id="schematicContainer" class="relative w-full overflow-x-auto overflow-y-hidden p-2 sm:p-4 bg-slate-950/90 flex items-center justify-center min-h-[320px] sm:min-h-[460px]">
+        <!-- Schematics.render inyectará el SVG dinámico aquí -->
+      </div>
+
+      <!-- Barra de navegación rápida de piezas (Chips inferiores) -->
+      <div class="px-4 py-3 bg-slate-900/60 border-t border-slate-800/80">
+        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Desglose de Componentes:</div>
+        <div id="componentChipsList" class="flex flex-wrap gap-1.5 sm:gap-2 max-h-24 overflow-y-auto pr-1">
+          <!-- Inyectado dinámicamente -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="mt-auto border-t border-slate-900/80 bg-slate-950 py-4 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <span class="font-semibold text-slate-400">AutoMeca Lab</span> — Plataforma Educativa Interactiva de Mecánica Automotriz y Motos.
+      </div>
+      <div class="flex items-center gap-4">
+        <span>Modo Offline: <span class="text-emerald-400 font-semibold">Activo</span></span>
+        <span>PWA Versión 1.0.0</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL / BOTTOM SHEET EXPLICATIVO INTERACTIVO -->
+  <div id="componentModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-0 sm:p-4 transition-all duration-300">
+    
+    <div class="modal-container w-full h-full sm:h-auto flex items-center justify-center">
+      
+      <div class="modal-content w-full sm:max-w-2xl bg-slate-900 border border-slate-700/80 sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden text-left">
+        
+        <!-- Pestaña táctil para deslizar (visible en móviles para efecto Bottom Sheet) -->
+        <div class="sm:hidden pt-3 pb-1 flex justify-center cursor-pointer" id="bottomSheetHandle">
+          <div class="w-12 h-1.5 bg-slate-600 rounded-full"></div>
+        </div>
+
+        <!-- Cabecera de la Tarjeta Explicativa -->
+        <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-900/90 flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <div id="modalIconContainer" class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 shadow-lg border border-slate-700">
+              <span id="modalIcon">⚙️</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span id="modalCategoryBadge" class="text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-slate-800 text-sky-400 border border-slate-700">
+                  Motor y Potencia
+                </span>
+                <span id="modalSeverityBadge" class="text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                  Crítico
+                </span>
+              </div>
+              <h3 id="modalTitle" class="text-lg sm:text-xl font-extrabold text-white mt-1">
+                Motor Térmico de Combustión
+              </h3>
+              <p id="modalShortDesc" class="text-xs text-slate-400 mt-0.5">
+                Corazón mecánico que convierte el carburante en tracción.
+              </p>
+            </div>
+          </div>
+
+          <!-- Botón Cerrar -->
+          <button id="btnCloseModal" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 text-lg transition-colors leading-none" aria-label="Cerrar modal">
+            ✕
+          </button>
+        </div>
+
+        <!-- Pestañas internas de la ficha: Función / Síntomas / Mantenimiento -->
+        <div class="flex border-b border-slate-800 bg-slate-950/60 px-4 sm:px-6">
+          <button id="tabModalFunction" class="modal-tab active py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 border-cyan-400 text-cyan-400 transition-colors">
+            🛠️ Función Técnica
+          </button>
+          <button id="tabModalSymptoms" class="modal-tab py-3 px-3 sm:px-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+            ⚠️ Averías y Síntomas
+          </button>
+          <button id="tabModalMaintenance" class="modal-tab py-3 px-3 sm:px-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+            💡 Mantenimiento
+          </button>
+        </div>
+
+        <!-- Cuerpo con Scroll Suave -->
+        <div class="p-5 sm:p-6 overflow-y-auto max-h-[60vh] space-y-4">
+          
+          <!-- Contenido Pestaña 1: Función -->
+          <div id="modalTabContentFunction" class="space-y-4">
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">¿Cómo opera en el vehículo?</h4>
+              <p id="modalFunctionText" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Descripción detallada del funcionamiento.
+              </p>
+            </div>
+
+            <!-- Comparativa / Curiosidad técnica -->
+            <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-3">
+              <span class="text-lg">💡</span>
+              <div>
+                <span class="text-xs font-bold text-sky-400 uppercase tracking-wide block">Nota Comparativa:</span>
+                <p id="modalComparisonText" class="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                  Comparativa de cómo difiere en coche eléctrico vs combustión o moto.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenido Pestaña 2: Síntomas de Avería -->
+          <div id="modalTabContentSymptoms" class="hidden space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">Indicadores perceptibles de fallo:</h4>
+            <div id="modalSymptomsList" class="space-y-2.5">
+              <!-- Inyectado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Contenido Pestaña 3: Consejos de Cuidado y Prevención -->
+          <div id="modalTabContentMaintenance" class="hidden space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">Pautas para alargar su vida útil:</h4>
+            <div id="modalMaintenanceList" class="space-y-3">
+              <!-- Inyectado dinámicamente -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between text-xs text-slate-400">
+          <div class="flex items-center gap-1.5">
+            <span>Presiona</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">Esc</kbd>
+            <span>o desliza hacia abajo para cerrar</span>
+          </div>
+          <button id="btnFooterClose" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition-colors">
+            Cerrar
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SCRIPTS MODULARES -->
+  <script src="./js/data.js"></script>
+  <script src="./js/schematics.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>

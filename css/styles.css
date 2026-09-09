@@ -1,0 +1,242 @@
+/* Estilos Globales, Animaciones y Ajustes Táctiles para AutoMeca Lab PWA */
+
+:root {
+  --app-bg: #090d16;
+  --panel-bg: rgba(15, 23, 42, 0.85);
+  --border-color: rgba(51, 65, 85, 0.6);
+  --brand-cyan: #38bdf8;
+  --brand-amber: #f59e0b;
+  --brand-emerald: #10b981;
+}
+
+/* Optimización táctil y rendimiento mobile-first */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: #f1f5f9;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  touch-action: manipulation;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Scrollbar estilizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Glassmorphism para paneles y tarjetas */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}
+
+.glass-panel-glow {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.15);
+}
+
+/* ESTILOS DE ESQUEMAS SVG Y PUNTOS CALIENTES (HOTSPOTS) */
+.schematics-svg {
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
+}
+
+/* Hotspots en estado de reposo */
+.hotspot-group {
+  outline: none;
+}
+
+.hotspot-ripple {
+  fill: #38bdf8;
+  animation: pulseRipple 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: center;
+}
+
+.hotspot-core {
+  fill: #0284c7;
+  stroke: #ffffff;
+  stroke-width: 2px;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+.hotspot-label {
+  fill: #ffffff;
+}
+
+/* Tematización dinámica de Hotspots según vehículo */
+.theme-combustion .hotspot-ripple {
+  fill: #f59e0b;
+}
+.theme-combustion .hotspot-core {
+  fill: #d97706;
+}
+.theme-combustion .hotspot-group.is-active .hotspot-core {
+  fill: #f59e0b;
+  stroke: #fef3c7;
+  filter: drop-shadow(0 0 12px #f59e0b);
+}
+
+.theme-electric .hotspot-ripple {
+  fill: #06b6d4;
+}
+.theme-electric .hotspot-core {
+  fill: #0284c7;
+}
+.theme-electric .hotspot-group.is-active .hotspot-core {
+  fill: #38bdf8;
+  stroke: #e0f2fe;
+  filter: drop-shadow(0 0 14px #38bdf8);
+}
+
+.theme-moto .hotspot-ripple {
+  fill: #10b981;
+}
+.theme-moto .hotspot-core {
+  fill: #059669;
+}
+.theme-moto .hotspot-group.is-active .hotspot-core {
+  fill: #10b981;
+  stroke: #d1fae5;
+  filter: drop-shadow(0 0 12px #10b981);
+}
+
+/* Animación y Hover de Hotspots */
+.hotspot-group:hover .hotspot-core,
+.hotspot-group:focus-visible .hotspot-core {
+  transform: scale(1.25);
+}
+
+.hotspot-group:hover .hotspot-tooltip {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+
+.hotspot-group.is-active .hotspot-core {
+  transform: scale(1.35);
+  stroke-width: 3px;
+}
+
+.tooltip-bg {
+  fill: rgba(15, 23, 42, 0.95);
+  stroke: #475569;
+  stroke-width: 1px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.tooltip-arrow {
+  fill: rgba(15, 23, 42, 0.95);
+}
+
+@keyframes pulseRipple {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(2.0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* MODAL Y BOTTOM SHEET RESPONSIVE */
+.modal-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  transform: scale(0.95) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0;
+  max-height: 90vh;
+}
+
+.modal-backdrop.is-open .modal-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* En dispositivos móviles (menor a 768px): Se convierte en Bottom Sheet deslizable */
+@media (max-width: 768px) {
+  .modal-container {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 1.5rem !important;
+    border-top-right-radius: 1.5rem !important;
+    transform: translateY(100%) !important;
+    max-height: 86vh !important;
+    margin: 0 !important;
+  }
+
+  .modal-backdrop.is-open .modal-content {
+    transform: translateY(0) !important;
+  }
+}
+
+/* Botón flotante de instalación PWA */
+.btn-pwa-install {
+  animation: bounceSlow 3s infinite ease-in-out;
+}
+
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Destacado de diagnóstico al seleccionar síntoma */
+.symptom-highlight {
+  animation: glowPulse 1.5s infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.4);
+    border-color: rgba(245, 158, 11, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+    border-color: #f59e0b;
+  }
+}

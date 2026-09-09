@@ -1,0 +1,67 @@
+{
+  "name": "AutoMeca Lab - Anatomía y Averías de Vehículos",
+  "short_name": "AutoMeca",
+  "description": "Aprende e interactúa con todos los componentes mecánicos y eléctricos de coches de combustión, coches eléctricos y motos urbanas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090d16",
+  "theme_color": "#0f172a",
+  "lang": "es",
+  "categories": ["education", "utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Coche Combustión",
+      "short_name": "Combustión",
+      "description": "Explorar motor térmico, radiador, frenos y transmisión",
+      "url": "./index.html?vehicle=combustion",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Coche Eléctrico (EV)",
+      "short_name": "Eléctrico",
+      "description": "Explorar batería de alto voltaje, motor eléctrico e inversor",
+      "url": "./index.html?vehicle=electric",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Moto Diaria",
+      "short_name": "Moto",
+      "description": "Explorar mecánica de motos y scooters urbanos",
+      "url": "./index.html?vehicle=moto",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

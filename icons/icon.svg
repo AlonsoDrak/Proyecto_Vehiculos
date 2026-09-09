@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="amberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Fondo redondeado estilo App Icon -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="#38bdf8" stroke-width="4" stroke-opacity="0.4" />
+
+  <!-- Círculo central técnico / Engranaje -->
+  <g transform="translate(256, 256)">
+    <!-- Dientes del engranaje mecánico -->
+    <g stroke="url(#neonCyan)" stroke-width="18" stroke-linecap="round" opacity="0.85">
+      <line x1="0" y1="-170" x2="0" y2="-130" />
+      <line x1="120" y1="-120" x2="92" y2="-92" />
+      <line x1="170" y1="0" x2="130" y2="0" />
+      <line x1="120" y1="120" x2="92" y2="92" />
+      <line x1="0" y1="170" x2="0" y2="130" />
+      <line x1="-120" y1="120" x2="-92" y2="92" />
+      <line x1="-170" y1="0" x2="-130" y2="0" />
+      <line x1="-120" y1="-120" x2="-92" y2="-92" />
+    </g>
+
+    <!-- Corona del engranaje / Disco de freno -->
+    <circle r="130" fill="none" stroke="url(#neonCyan)" stroke-width="12" filter="url(#glow)" />
+    <circle r="105" fill="#0f172a" stroke="#38bdf8" stroke-width="4" stroke-dasharray="6,8" opacity="0.6" />
+
+    <!-- Silueta de pistón / Rayo eléctrico híbrido -->
+    <path d="M-15,-80 L35,-80 L5,-10 L45,-10 L-25,90 L-5,15 L-40,15 Z" fill="url(#amberGlow)" filter="url(#glow)" />
+
+    <!-- Puntos de calibre e indicadores tecnológicos -->
+    <circle cx="0" cy="-60" r="4" fill="#38bdf8" />
+    <circle cx="50" cy="0" r="4" fill="#38bdf8" />
+    <circle cx="-50" cy="0" r="4" fill="#38bdf8" />
+    <circle cx="0" cy="60" r="4" fill="#38bdf8" />
+  </g>
+
+  <!-- Detalle inferior: Texto o insignia -->
+  <text x="256" y="445" text-anchor="middle" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" letter-spacing="6">AUTOMECA</text>
+</svg>
