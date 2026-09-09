@@ -18,3 +18,4 @@ desktop.ini
 
 # Scripts temporales de generación local
 generate_icons.ps1
+push_to_github.bat
