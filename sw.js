@@ -1,7 +1,8 @@
-// Service Worker para AutoMeca Lab PWA
-const CACHE_NAME = 'automeca-v1.0.0';
+// Service Worker para AutoMeca Lab PWA (Optimizado para GitHub Pages y Localhost)
+const CACHE_NAME = 'automeca-v1.0.1';
 
-const ASSETS_TO_CACHE = [
+// Recursos relativos al scope del Service Worker
+const RELATIVE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
@@ -14,13 +15,15 @@ const ASSETS_TO_CACHE = [
   './icons/icon-512.png'
 ];
 
-// Instalación: Precaché de recursos críticos del App Shell
+// Instalación: Precaché de recursos del App Shell resolviendo URLs relativas al scope
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Precargando App Shell en caché:', CACHE_NAME);
-        return cache.addAll(ASSETS_TO_CACHE);
+        console.log('[SW] Precargando App Shell para scope:', self.registration.scope);
+        // Resolver cada recurso relativo a self.location (funciona tanto en / como en /Proyecto_Vehiculos/)
+        const urlsToCache = RELATIVE_ASSETS.map((asset) => new URL(asset, self.location).href);
+        return cache.addAll(urlsToCache);
       })
       .then(() => self.skipWaiting())
       .catch((err) => {
@@ -36,7 +39,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[SW] Eliminando caché obsoleta:', key);
+            console.log('[SW] Eliminando versión de caché anterior:', key);
             return caches.delete(key);
           }
         })
@@ -45,32 +48,30 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch: Estrategia Stale-While-Revalidate / Cache-First para soporte offline completo
+// Fetch: Estrategia Stale-While-Revalidate / Cache-First para soporte offline
 self.addEventListener('fetch', (event) => {
-  // Solo manejar peticiones GET
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // No interceptar peticiones de extensiones o externas que no sean del mismo origen (excepto CDN de Tailwind o fuentes)
+  // Mismo origen (Localhost o dominio de GitHub Pages)
   if (url.origin === location.origin) {
     event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
+      caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
         if (cachedResponse) {
-          // Actualizar en segundo plano si hay red
-          fetch(event.request).then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, networkResponse);
-              });
-            }
-          }).catch(() => {
-            // Ignorar fallos de red silenciosamente cuando estamos offline
-          });
+          // Actualización de fondo
+          fetch(event.request)
+            .then((networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+              }
+            })
+            .catch(() => {
+              // Silencio cuando está offline
+            });
           return cachedResponse;
         }
 
-        // Si no está en caché, buscar en red y guardar en caché
         return fetch(event.request)
           .then((response) => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
@@ -83,15 +84,16 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            // Si falla la red y es una navegación HTML, devolver la página principal
+            // Si es navegación HTML y no hay red, servir index.html relativo al scope
             if (event.request.headers.get('accept')?.includes('text/html')) {
-              return caches.match('./index.html');
+              const fallbackUrl = new URL('./index.html', self.location).href;
+              return caches.match(fallbackUrl);
             }
           });
       })
     );
   } else {
-    // Para CDNs (ej. Tailwind CSS o Google Fonts), usar Cache-First con fallback a red
+    // CDNs externos (ej. Tailwind CSS)
     event.respondWith(
       caches.match(event.request).then((cached) => {
         return cached || fetch(event.request).then((res) => {
@@ -100,9 +102,7 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
           }
           return res;
-        }).catch(() => {
-          // Si falla y no está en caché, simplemente no se devuelve nada
-        });
+        }).catch(() => {});
       })
     );
   }
