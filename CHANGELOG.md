@@ -7,9 +7,36 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
-## [En desarrollo] (Rama: Mejoras)
+## [En desarrollo] (Rama: Mejoras) - Versión 2.0.0
 
 ### Añadido y Mejorado
+- **Fotografías 100% Verificadas y Eliminación Definitiva de Fallbacks Arbitrarios**:
+  - Ampliación del catálogo local a 44 modelos clave con URLs de imágenes 100% verificadas (HTTP 200 OK), eliminando enlaces rotos o imágenes 404.
+  - Corrección de fotografías inconsistentes: se corrigieron búsquedas como Honda Odyssey (que mostraba un buggy de 1970) y Kia K3 (que mostraba un Ford Mustang).
+  - Erradicación total de fallbacks fijos por defecto (como el Ford Mustang para coches de combustión sin imagen).
+  - Implementación de un generador de siluetas vectoriales SVG dinámico (`getVehicleSvgFallback`) clasificado por tipo (Sedán/SUV/Hatchback, Eléctrico EV y Motocicleta) con paleta cromática de marca para modelos externos sin imagen disponible.
+  - Filtro estricto contra páginas de desambiguación en Wikipedia y prevención de tarjetas duplicadas al presionar Enter o buscar consecutivamente.
+- **Precios Oficiales Reales del Mercado Automotriz Mexicano (MSRP)**:
+  - Corrección precisa de precios de catálogo con base en valores oficiales de agencia:
+    - **Tesla Cybertruck**: Actualizado de ~$820,000 MXN al precio oficial de Tesla México de **$1,949,000 - $2,599,900 MXN** (promedio: **$2,199,000 MXN**).
+    - **Kia K3**: Rango oficial de **$322,400 - $461,900 MXN** (promedio: **$389,000 MXN**).
+    - **Honda Odyssey**: Rango oficial de **$1,159,900 - $1,219,900 MXN** (promedio: **$1,189,000 MXN**).
+  - Inclusión de más de 15 modelos de gran volumen en México (Toyota RAV4, Nissan Sentra, Mazda CX-5, Chevrolet Tracker, Kia Seltos, Ford F-150 Lobo, Suzuki Swift, Renault Kwid, Italika DM200, Yamaha R3, etc.).
+- **Desglose de Pago en Visita de Recarga / Gasolina**:
+  - Reemplazo definitivo de la sección *Consejos de Uso & Mantenimiento Clave* por el módulo interactivo:
+    - *"¿Cuánto pagaré cuando visite para recargar gas o carga según lo que elegí en la calculadora?"*.
+    - Presenta 3 respuestas claras y directas:
+      1. **Llenado Total (100% de reserva a lleno)**: Costo exacto de llenar el tanque o recargar la batería de 0% a 100%.
+      2. **Recarga Semanal Habitual (7 días de trayectos)**: Cuánto gastará el usuario al repostar los kilómetros acumulados en 1 semana según su uso diario configurado.
+      3. **Gasto Diario Neto**: Costo por jornada de conducción.
+      4. **Explicación en lenguaje natural**: Resumen explicativo adaptado al tipo de combustible que se actualiza al instante al manipular los controles deslizantes.
+- **Estabilización de Cabecera y Navegación (Cero Desplazamiento)**:
+  - Solución al problema donde al seleccionar "Buscador & Consumos", las opciones de "Rayos X 3D" se movían hacia la derecha.
+  - Se estructuraron contenedores simétricos con ancho mínimo (`sm:min-w-[240px]`) en ambos extremos de la cabecera flex `justify-between`.
+  - Se reemplazó la clase `hidden` (`display: none`) por `invisible pointer-events-none` en el botón de Diagnóstico en `js/app.js`, preservando el espacio físico ocupado en el DOM y evitando el colapso del flexbox.
+  - Se agregó `html { scrollbar-gutter: stable; }` en `css/styles.css` para eliminar el salto de layout al aparecer la barra de desplazamiento vertical en el buscador.
+- **Actualización de Service Worker PWA (`sw.js`)**:
+  - Cache bump a `autofind-v2.0.0-accurate-specs-stable-layout` para refresco automático de recursos en clientes móviles y de escritorio.
 - **Motor de Desambiguación Automotriz & Solución al Caso "Mustang" / Caballo**:
   - Implementación de un pipeline de desambiguación con más de 70 alias automotrices canónicos (`mustang` -> `Ford Mustang`, `beetle` -> `Volkswagen Beetle`, `golf` -> `Volkswagen Golf`, `viper` -> `Dodge Viper`, etc.).
   - Filtro estricto de validación vehicular mediante expresiones regulares que analiza descripciones, categorías y textos para descartar entidades biológicas (caballos, mamíferos, insectos) o de entretenimiento (canciones, películas), garantizando que las consultas globales siempre recuperen automóviles o motocicletas legítimos con fotografías fidedignas.
@@ -17,8 +44,6 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - **Adaptación de la Sección "Lo que debes saber de este modelo" (Día a Día)**:
   - **Frecuencia de Recarga / Repostaje**: Cálculo dinámico en vivo que calcula e informa cada cuántos días tendrá que visitar la gasolinera o punto de recarga el usuario, número de visitas mensuales estimadas y distintivo de conveniencia (`🟢 Muy Baja`, `🔵 Moderada`, `🟡 Semanal`, `⚡ Frecuente`). Conectado en tiempo real al deslizador de kilometraje diario habitual.
   - **Precio Promedio de Mercado**: Despliegue prominente del precio promedio comercial y rango de mercado sugerido tanto en las tarjetas del catálogo como en la ficha técnica ampliada. Incorpora un estimador contextual para consultas externas por segmento.
-- **Actualización de Service Worker PWA (`sw.js`)**:
-  - Bump a `autofind-v1.9.0-specs-refined` para invalidación inmediata de caché en navegadores móviles y de escritorio.
 
 ### Corregido
 - **Desbloqueo Total de Interacción y Clics en la Interfaz**:

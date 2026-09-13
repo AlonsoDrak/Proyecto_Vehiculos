@@ -97,20 +97,22 @@ class AutoFindApp {
       this.appMode = mode;
       if (mode === '3d') {
         if (navTab3D) {
-          navTab3D.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95';
+          navTab3D.className = 'flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-colors active:scale-95 min-w-[90px] sm:min-w-[125px]';
         }
         if (navTabFinder) {
-          navTabFinder.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 transition-all active:scale-95';
+          navTabFinder.className = 'flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-slate-400 hover:text-slate-200 transition-colors active:scale-95 min-w-[100px] sm:min-w-[165px]';
         }
         if (view3DMode) view3DMode.classList.remove('hidden');
         if (viewSpecsFinder) viewSpecsFinder.classList.add('hidden');
-        if (btnToggleDiagnosis) btnToggleDiagnosis.classList.remove('hidden');
+        if (btnToggleDiagnosis) {
+          btnToggleDiagnosis.classList.remove('invisible', 'pointer-events-none');
+        }
       } else {
         if (navTabFinder) {
-          navTabFinder.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95';
+          navTabFinder.className = 'flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-colors active:scale-95 min-w-[100px] sm:min-w-[165px]';
         }
         if (navTab3D) {
-          navTab3D.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 transition-all active:scale-95';
+          navTab3D.className = 'flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-slate-400 hover:text-slate-200 transition-colors active:scale-95 min-w-[90px] sm:min-w-[125px]';
         }
         if (view3DMode) view3DMode.classList.add('hidden');
         if (viewSpecsFinder) {
@@ -119,7 +121,9 @@ class AutoFindApp {
             window.VehicleFinder.init();
           }
         }
-        if (btnToggleDiagnosis) btnToggleDiagnosis.classList.add('hidden');
+        if (btnToggleDiagnosis) {
+          btnToggleDiagnosis.classList.add('invisible', 'pointer-events-none');
+        }
       }
     };
 

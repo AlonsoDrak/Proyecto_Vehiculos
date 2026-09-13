@@ -15,6 +15,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background-color: var(--app-bg);
   color: #f1f5f9;
