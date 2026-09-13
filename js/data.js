@@ -423,7 +423,7 @@ const VEHICLES_DATA = {
     subtitle: 'Batería de Alto Voltaje, Motor Eléctrico, Inversor y Freno Regenerativo',
     icon: '🔋',
     badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-    model3d: './models/electric_xray.glb?v=1.5.0',
+    model3d: './models/electric_xray.glb?v=1.6.0',
     cameraDefaultOrbit: '45deg 72deg 4.6m',
     cameraDefaultTarget: '0m 0.5m 0m',
     description: 'Los coches eléctricos puros (BEV) sustituyen el motor térmico por motores eléctricos de alto rendimiento, propulsados por una gran batería de iones de litio y gestionados por electrónica de potencia de alta eficiencia.',
