@@ -1,4 +1,4 @@
-/* Estilos Globales, Animaciones y Ajustes Táctiles para AutoMeca Lab PWA */
+/* Estilos Globales, Animaciones y Ajustes Táctiles para AutoFind Lab PWA */
 
 :root {
   --app-bg: #090d16;
@@ -240,3 +240,141 @@ body {
     border-color: #f59e0b;
   }
 }
+
+/* ESTILOS PARA VISOR 3D GOOGLE MODEL-VIEWER Y HOTSPOTS 3D */
+model-viewer {
+  --poster-color: transparent;
+  background-color: #060911;
+  background-image: 
+    radial-gradient(ellipse at 50% 40%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+/* Hotspots en el espacio 3D de model-viewer */
+.hotspot-3d {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid #38bdf8;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 800;
+  font-size: 12px;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.6), 0 4px 8px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.hotspot-3d::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid #38bdf8;
+  opacity: 0.8;
+  animation: pulseRing 2s cubic-bezier(0.2, 0, 0.4, 1) infinite;
+}
+
+.hotspot-3d:hover,
+.hotspot-3d:focus-visible {
+  transform: scale(1.25);
+  background: #0284c7;
+  border-color: #ffffff;
+  z-index: 20;
+}
+
+.hotspot-3d.is-active {
+  transform: scale(1.3);
+  background: #f59e0b;
+  border-color: #fef3c7;
+  box-shadow: 0 0 20px #f59e0b;
+  z-index: 25;
+}
+
+.hotspot-3d.is-active::before {
+  border-color: #f59e0b;
+}
+
+/* Tooltip en Hotspot 3D al hacer hover */
+.hotspot-3d-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(15, 23, 42, 0.95);
+  color: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hotspot-3d:hover .hotspot-3d-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  75% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* Chip de componente activo en la barra inferior */
+.component-chip.is-active {
+  background: rgba(14, 165, 233, 0.25) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+}
+
+.component-chip.is-active span:first-child {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+}
+
+/* Tarjeta Flotante HUD de Previsualización 3D */
+#floatingComponentCard {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+#floatingComponentCard.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Cursor de agarre 360° en el visor 3D */
+model-viewer {
+  cursor: grab;
+}
+
+model-viewer:active {
+  cursor: grabbing;
+}
+

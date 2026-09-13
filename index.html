@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>AutoMeca Lab - Guía Interactiva de Mecánica y Averías</title>
+  <title>AutoFind Lab - Guía Interactiva de Mecánica y Averías</title>
 
   <!-- Metadatos PWA y Mobile -->
   <meta name="description" content="Aprende interactivamente cómo funciona cada componente de coches de combustión, coches eléctricos y motos urbanas. Diagnóstico de averías y consejos de cuidado.">
@@ -11,11 +11,14 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="AutoMeca">
+  <meta name="apple-mobile-web-app-title" content="AutoFind">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <!-- Google <model-viewer> para visualización 3D fotorrealista PBR -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,7 +57,7 @@
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="font-black text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-400 bg-clip-text text-transparent">AutoMeca Lab</h1>
+            <h1 class="font-black text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-400 bg-clip-text text-transparent">AutoFind Lab</h1>
             <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 hidden sm:inline-block">PWA Offline</span>
           </div>
           <p class="text-xs text-slate-400 hidden sm:block">Anatomía técnica, averías comunes y guía de mantenimiento</p>
@@ -189,23 +192,144 @@
       </div>
     </section>
 
-    <!-- ÁREA PRINCIPAL DEL ESQUEMA VECTORIAL INTERACTIVO -->
+    <!-- ÁREA PRINCIPAL DEL ESQUEMA VECTORIAL Y MODELO 3D INTERACTIVO -->
     <section class="relative glass-panel rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col">
       
-      <!-- Barra superior del visor con controles -->
-      <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-xs">
-        <div class="flex items-center gap-2">
-          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          <span class="font-mono text-slate-300 font-semibold tracking-wide uppercase">Visor Técnico de Despiece</span>
+      <!-- Barra superior del visor con controles y selector 3D / 2D -->
+      <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-xs">
+        
+        <!-- Estado y Selector de Modo 3D Rayos X / Plano 2D -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-mono text-slate-300 font-bold tracking-wide uppercase text-[11px] sm:text-xs">Visor Técnico</span>
+          </div>
+
+          <!-- Píldoras de alternancia de visualización -->
+          <div id="viewModeSelector" class="flex items-center bg-slate-950/80 p-0.5 rounded-lg border border-slate-800">
+            <button id="btnMode3D" class="view-mode-pill active px-2.5 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all bg-gradient-to-r from-sky-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+              <span>🕶️</span>
+              <span>Rayos X 3D</span>
+            </button>
+            <button id="btnMode2D" class="view-mode-pill px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 transition-all">
+              <span>📐</span>
+              <span>Plano 2D</span>
+            </button>
+          </div>
         </div>
-        <div class="flex items-center gap-2 text-slate-400">
-          <span class="hidden sm:inline">Puntos clicables:</span>
-          <span id="hotspotsVisibleCount" class="font-mono font-bold text-cyan-400">10</span>
+
+        <!-- Controles de Navegación 3D y Conteo de Piezas -->
+        <div class="flex items-center gap-2">
+          
+          <!-- Controles 3D (Visibles en modo 3D) -->
+          <div id="controls3D" class="flex items-center gap-1.5">
+            <button id="btnResetCamera3D" title="Restablecer posición de cámara 3D" class="px-2 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[11px] font-medium flex items-center gap-1 transition-all active:scale-95">
+              <span>🔄</span>
+              <span class="hidden md:inline">Centrar</span>
+            </button>
+            <button id="btnToggleRotate3D" title="Pausar o reanudar giro automático" class="px-2 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[11px] font-medium flex items-center gap-1 transition-all active:scale-95">
+              <span id="iconRotate3D">🌐</span>
+              <span class="hidden md:inline" id="textRotate3D">Giro 360°</span>
+            </button>
+            <button id="btnTogglePins3D" title="Mostrar u ocultar pines 3D sobre el vehículo" class="px-2 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 text-[11px] font-medium flex items-center gap-1 transition-all active:scale-95">
+              <span id="iconPins3D">🏷️</span>
+              <span class="hidden md:inline" id="textPins3D">Pines</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5 text-slate-400 pl-2 border-l border-slate-800 text-[11px]">
+            <span class="hidden sm:inline">Puntos:</span>
+            <span id="hotspotsVisibleCount" class="font-mono font-bold text-cyan-400">10</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Contenedor del Visor 3D Interactivo con Google <model-viewer> -->
+      <div id="viewer3dContainer" class="relative w-full overflow-hidden bg-slate-950 flex items-center justify-center min-h-[360px] sm:min-h-[480px]">
+        <model-viewer
+          id="mainModelViewer"
+          src="./models/combustion_xray.glb"
+          alt="Coche Estándar Sedán con Efecto Rayos X 3D"
+          camera-controls
+          touch-action="pan-y"
+          auto-rotate
+          auto-rotate-delay="2000"
+          rotation-per-second="18deg"
+          shadow-intensity="1.4"
+          shadow-softness="0.75"
+          exposure="1.05"
+          camera-orbit="45deg 72deg 4.6m"
+          min-camera-orbit="auto auto 0.9m"
+          max-camera-orbit="auto auto 7.5m"
+          field-of-view="32deg"
+          interpolation-decay="200"
+          class="w-full h-[360px] sm:h-[480px] outline-none cursor-grab active:cursor-grabbing"
+        >
+          <!-- Barra de progreso de carga 3D -->
+          <div slot="progress-bar" class="model-progress-bar absolute inset-x-0 bottom-0 h-1 bg-slate-800">
+            <div class="model-progress-fill h-full bg-gradient-to-r from-cyan-500 to-sky-400 w-0 transition-all duration-300"></div>
+          </div>
+
+          <!-- Indicador de ayuda táctil/ratón -->
+          <div class="absolute bottom-3 right-3 pointer-events-none flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800/80 backdrop-blur-md shadow-lg">
+            <span class="text-cyan-400">👆</span>
+            <span class="hidden sm:inline">Arrastra libremente 360° • Zoom con rueda</span>
+            <span class="sm:hidden">Arrastra para rotar 360°</span>
+          </div>
+        </model-viewer>
+
+        <!-- Capa Superpuesta HUD para Enfoque Suave de Componente (pointer-events: none) -->
+        <div id="floatingCardOverlay" class="absolute inset-0 pointer-events-none p-3 sm:p-4 flex flex-col justify-between z-10">
+          <!-- Indicador superior de cámara enfocando -->
+          <div class="flex items-center justify-between">
+            <div id="cameraFocusStatus" class="hidden pointer-events-auto items-center gap-2 bg-slate-900/90 backdrop-blur-md border border-cyan-500/40 text-cyan-300 text-xs px-3 py-1.5 rounded-xl shadow-lg transition-all duration-300">
+              <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span id="cameraFocusText">Enfocando pieza...</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta Flotante HUD de Previsualización y Acceso a Ficha -->
+          <div id="floatingComponentCard" class="hidden pointer-events-auto self-start sm:max-w-md w-full bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 rounded-2xl p-3.5 sm:p-4 shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <div id="floatingCardIcon" class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-xl shrink-0 shadow-inner">
+                  ⚙️
+                </div>
+                <div class="space-y-0.5">
+                  <div class="flex items-center gap-2">
+                    <span id="floatingCardBadge" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/60 font-bold">#1</span>
+                    <h4 id="floatingCardTitle" class="text-sm font-bold text-white leading-snug">Motor Térmico</h4>
+                  </div>
+                  <p id="floatingCardCategory" class="text-[11px] text-cyan-400/80 font-medium">Motor y Potencia</p>
+                  <p id="floatingCardDesc" class="text-xs text-slate-300 line-clamp-2 leading-relaxed pt-0.5">
+                    Corazón mecánico que convierte el combustible en energía de tracción.
+                  </p>
+                </div>
+              </div>
+              <button id="btnCloseFloatingCard" title="Cerrar previsualización" class="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800/80 transition-colors">
+                ✕
+              </button>
+            </div>
+
+            <!-- Botones de acción: abrir modal o restablecer vista -->
+            <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <button id="btnFloatingCardDetails" class="flex-1 py-1.5 px-3 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                <span>📖</span>
+                <span>Ver Ficha Técnica Completa</span>
+              </button>
+              <button id="btnFloatingCardReset" title="Restablecer vista completa del vehículo" class="py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs border border-slate-700 transition-all active:scale-95 flex items-center gap-1">
+                <span>🔄</span>
+                <span class="text-[10px]">General</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Contenedor del Gráfico SVG Interactivo -->
-      <div id="schematicContainer" class="relative w-full overflow-x-auto overflow-y-hidden p-2 sm:p-4 bg-slate-950/90 flex items-center justify-center min-h-[320px] sm:min-h-[460px]">
+      <!-- Contenedor del Gráfico SVG Interactivo (Modo 2D) -->
+      <div id="schematicContainer" class="hidden relative w-full overflow-x-auto overflow-y-hidden p-2 sm:p-4 bg-slate-950/90 flex items-center justify-center min-h-[320px] sm:min-h-[460px]">
         <!-- Schematics.render inyectará el SVG dinámico aquí -->
       </div>
 
@@ -225,7 +349,7 @@
   <footer class="mt-auto border-t border-slate-900/80 bg-slate-950 py-4 px-4 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
       <div>
-        <span class="font-semibold text-slate-400">AutoMeca Lab</span> — Plataforma Educativa Interactiva de Mecánica Automotriz y Motos.
+        <span class="font-semibold text-slate-400">AutoFind Lab</span> — Plataforma Educativa Interactiva de Mecánica Automotriz y Motos.
       </div>
       <div class="flex items-center gap-4">
         <span>Modo Offline: <span class="text-emerald-400 font-semibold">Activo</span></span>

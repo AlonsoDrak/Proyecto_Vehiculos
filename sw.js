@@ -1,5 +1,5 @@
-// Service Worker para AutoMeca Lab PWA (Optimizado para GitHub Pages y Localhost)
-const CACHE_NAME = 'automeca-v1.0.1';
+// Service Worker para AutoFind Lab PWA (Optimizado para GitHub Pages y Localhost)
+const CACHE_NAME = 'autofind-v1.3.0-3d';
 
 // Recursos relativos al scope del Service Worker
 const RELATIVE_ASSETS = [
@@ -10,6 +10,9 @@ const RELATIVE_ASSETS = [
   './js/data.js',
   './js/schematics.js',
   './js/app.js',
+  './models/combustion_xray.glb',
+  './models/electric_xray.glb',
+  './models/moto_xray.glb',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png'

@@ -1,13 +1,17 @@
-// Controlador Principal de la Aplicación AutoMeca Lab
+// Controlador Principal de la Aplicación AutoFind Lab
 // Gestión de estado, PWA, Service Worker, eventos táctiles y modales.
 
-class AutoMecaApp {
+class AutoFindApp {
   constructor() {
     this.currentVehicle = 'combustion';
     this.currentCategory = 'all';
     this.searchQuery = '';
     this.activeComponentId = null;
     this.deferredInstallPrompt = null;
+    this.viewMode = '3d'; // '3d' o '2d'
+    this.isRotating3D = true;
+    this.showPins3D = false; // Desactivado por defecto para vista 3D limpia y despejada
+    this.cameraFocusTimeout = null;
 
     this.init();
   }
@@ -55,7 +59,7 @@ class AutoMecaApp {
     });
 
     window.addEventListener('appinstalled', () => {
-      console.log('[PWA] AutoMeca Lab instalada en el dispositivo');
+      console.log('[PWA] AutoFind Lab instalada en el dispositivo');
       const btnInstall = document.getElementById('btnInstallPwa');
       if (btnInstall) btnInstall.classList.add('hidden');
       this.deferredInstallPrompt = null;
@@ -84,6 +88,46 @@ class AutoMecaApp {
         this.switchVehicle(vehicleKey);
       });
     });
+
+    // Alternancia de visualización 3D Rayos X ⇄ Plano 2D
+    const btnMode3D = document.getElementById('btnMode3D');
+    const btnMode2D = document.getElementById('btnMode2D');
+    if (btnMode3D) btnMode3D.addEventListener('click', () => this.switchViewMode('3d'));
+    if (btnMode2D) btnMode2D.addEventListener('click', () => this.switchViewMode('2d'));
+
+    // Controles de navegación 3D
+    const btnResetCamera3D = document.getElementById('btnResetCamera3D');
+    const btnToggleRotate3D = document.getElementById('btnToggleRotate3D');
+    const btnTogglePins3D = document.getElementById('btnTogglePins3D');
+
+    if (btnResetCamera3D) btnResetCamera3D.addEventListener('click', () => this.resetCamera3D());
+    if (btnToggleRotate3D) btnToggleRotate3D.addEventListener('click', () => this.toggleAutoRotate3D());
+    if (btnTogglePins3D) btnTogglePins3D.addEventListener('click', () => this.togglePins3D());
+
+    // Acciones de la Tarjeta Flotante HUD de Previsualización 3D
+    const btnFloatingCardDetails = document.getElementById('btnFloatingCardDetails');
+    const btnFloatingCardReset = document.getElementById('btnFloatingCardReset');
+    const btnCloseFloatingCard = document.getElementById('btnCloseFloatingCard');
+
+    if (btnFloatingCardDetails) {
+      btnFloatingCardDetails.addEventListener('click', () => {
+        if (this.activeComponentId) {
+          this.openModal(this.activeComponentId);
+        }
+      });
+    }
+
+    if (btnFloatingCardReset) {
+      btnFloatingCardReset.addEventListener('click', () => {
+        this.resetCamera3D();
+      });
+    }
+
+    if (btnCloseFloatingCard) {
+      btnCloseFloatingCard.addEventListener('click', () => {
+        this.hideFloatingComponentCard();
+      });
+    }
 
     // Filtros de categorías
     const catContainer = document.getElementById('categoryFilters');
@@ -189,6 +233,7 @@ class AutoMecaApp {
   // CAMBIO DE VEHÍCULO
   switchVehicle(vehicleKey) {
     if (!VEHICLES_DATA[vehicleKey]) return;
+    this.hideFloatingComponentCard();
     this.currentVehicle = vehicleKey;
     const data = VEHICLES_DATA[vehicleKey];
 
@@ -235,8 +280,21 @@ class AutoMecaApp {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = '';
 
-    // Renderizar gráfico vectorial SVG con hotspots
-    this.renderSchematic();
+    // Configurar disponibilidad de 3D según el vehículo
+    const viewModeSelector = document.getElementById('viewModeSelector');
+    const modelViewer = document.getElementById('mainModelViewer');
+
+    if (data.model3d && modelViewer) {
+      if (viewModeSelector) viewModeSelector.classList.remove('opacity-40', 'pointer-events-none');
+      modelViewer.src = data.model3d;
+      modelViewer.cameraOrbit = data.cameraDefaultOrbit || '45deg 72deg 4.6m';
+      modelViewer.cameraTarget = data.cameraDefaultTarget || '0m 0.5m 0m';
+      this.switchViewMode(this.viewMode || '3d');
+    } else {
+      // Si el vehículo aún no tiene modelo 3D (prototipo en combustión), cambiar a 2D
+      if (viewModeSelector) viewModeSelector.classList.add('opacity-40', 'pointer-events-none');
+      this.switchViewMode('2d');
+    }
 
     // Renderizar chips de componentes inferiores
     this.renderComponentChips();
@@ -245,7 +303,272 @@ class AutoMecaApp {
     this.renderDiagnosisSymptoms();
   }
 
-  // RENDERIZADO DEL ESQUEMA VECTORIAL
+  // ALTERNAR ENTRE MODO 3D RAYOS X Y PLANO 2D
+  switchViewMode(mode) {
+    const data = VEHICLES_DATA[this.currentVehicle];
+    if (mode === '3d' && !data.model3d) return;
+
+    this.viewMode = mode;
+    const btn3d = document.getElementById('btnMode3D');
+    const btn2d = document.getElementById('btnMode2D');
+    const v3dContainer = document.getElementById('viewer3dContainer');
+    const v2dContainer = document.getElementById('schematicContainer');
+    const controls3D = document.getElementById('controls3D');
+
+    if (mode === '3d') {
+      btn3d?.classList.add('active', 'bg-gradient-to-r', 'from-sky-500/20', 'to-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40', 'font-bold');
+      btn3d?.classList.remove('text-slate-400', 'font-medium');
+      btn2d?.classList.remove('active', 'bg-gradient-to-r', 'from-sky-500/20', 'to-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40', 'font-bold');
+      btn2d?.classList.add('text-slate-400', 'font-medium');
+
+      v3dContainer?.classList.remove('hidden');
+      v2dContainer?.classList.add('hidden');
+      controls3D?.classList.remove('hidden');
+
+      this.renderModelViewerHotspots();
+    } else {
+      btn2d?.classList.add('active', 'bg-gradient-to-r', 'from-sky-500/20', 'to-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40', 'font-bold');
+      btn2d?.classList.remove('text-slate-400', 'font-medium');
+      btn3d?.classList.remove('active', 'bg-gradient-to-r', 'from-sky-500/20', 'to-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40', 'font-bold');
+      btn3d?.classList.add('text-slate-400', 'font-medium');
+
+      v3dContainer?.classList.add('hidden');
+      v2dContainer?.classList.remove('hidden');
+      controls3D?.classList.add('hidden');
+
+      this.renderSchematic();
+    }
+  }
+
+  // RENDERIZADO DE HOTSPOTS 3D EN GOOGLE MODEL-VIEWER
+  renderModelViewerHotspots() {
+    const modelViewer = document.getElementById('mainModelViewer');
+    if (!modelViewer) return;
+
+    // Limpiar pines anteriores directamente en model-viewer
+    modelViewer.querySelectorAll('.hotspot-3d').forEach(el => el.remove());
+
+    const data = VEHICLES_DATA[this.currentVehicle];
+    if (!data.model3d) return;
+
+    const filteredComponents = this.getFilteredComponents();
+
+    const hotspotsCount = document.getElementById('hotspotsVisibleCount');
+    if (hotspotsCount) {
+      hotspotsCount.textContent = `${filteredComponents.length} de ${data.components.length}`;
+    }
+
+    // Si los pines 3D no están activados por el usuario, mantener la vista 100% limpia
+    if (!this.showPins3D) return;
+
+    filteredComponents
+      .filter(c => c.hotspot3d)
+      .forEach(comp => {
+        const btn = document.createElement('button');
+        btn.className = `hotspot-3d ${comp.id === this.activeComponentId ? 'is-active' : ''}`;
+        btn.slot = `hotspot-${comp.id}`;
+        btn.setAttribute('data-id', comp.id);
+        btn.setAttribute('data-position', comp.hotspot3d.position);
+        btn.setAttribute('data-normal', comp.hotspot3d.normal);
+        btn.setAttribute('aria-label', `Ver detalles de ${comp.name}`);
+        btn.innerHTML = `<span>${comp.badgeNum}</span><div class="hotspot-3d-tooltip">${comp.name}</div>`;
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.selectComponent(comp.id);
+        });
+
+        modelViewer.appendChild(btn);
+      });
+  }
+
+  // ALTERNAR VISIBILIDAD DE PINES 3D FLOTANTES
+  togglePins3D() {
+    this.showPins3D = !this.showPins3D;
+    const btnPins = document.getElementById('btnTogglePins3D');
+    const textPins = document.getElementById('textPins3D');
+
+    if (btnPins) {
+      if (this.showPins3D) {
+        btnPins.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40');
+        btnPins.classList.remove('text-slate-400');
+        if (textPins) textPins.textContent = 'Pines ON';
+      } else {
+        btnPins.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40');
+        btnPins.classList.add('text-slate-400');
+        if (textPins) textPins.textContent = 'Pines';
+      }
+    }
+
+    this.renderModelViewerHotspots();
+  }
+
+  // SELECCIÓN DE COMPONENTE CON DESPLAZAMIENTO SUAVE Y TARJETA PREVIA
+  selectComponent(componentId, directModal = false, initialTab = 'function') {
+    const data = VEHICLES_DATA[this.currentVehicle];
+    const comp = data.components.find(c => c.id === componentId);
+    if (!comp) return;
+
+    this.activeComponentId = componentId;
+
+    if (this.viewMode === '3d' && data.model3d) {
+      if (directModal) {
+        this.focusComponent3D(componentId);
+        this.openModal(componentId, initialTab);
+        return;
+      }
+
+      // 1. Enfocar suavemente la cámara 3D hacia la pieza
+      this.focusComponent3D(componentId);
+
+      // 2. Mostrar tarjeta HUD flotante de previsualización sin tapar la pantalla
+      this.showFloatingComponentCard(componentId);
+
+      // 3. Resaltar chip activo en la barra inferior
+      this.highlightActiveComponent(componentId);
+    } else {
+      // En modo 2D o vehículos sin 3D, abrir ficha modal directamente
+      this.openModal(componentId, initialTab);
+    }
+  }
+
+  // MOSTRAR TARJETA FLOTANTE HUD CON DETALLES PREVIOS
+  showFloatingComponentCard(componentId) {
+    const data = VEHICLES_DATA[this.currentVehicle];
+    const comp = data.components.find(c => c.id === componentId);
+    if (!comp) return;
+
+    const card = document.getElementById('floatingComponentCard');
+    const iconEl = document.getElementById('floatingCardIcon');
+    const badgeEl = document.getElementById('floatingCardBadge');
+    const titleEl = document.getElementById('floatingCardTitle');
+    const catEl = document.getElementById('floatingCardCategory');
+    const descEl = document.getElementById('floatingCardDesc');
+    const focusStatus = document.getElementById('cameraFocusStatus');
+    const focusText = document.getElementById('cameraFocusText');
+
+    if (iconEl) iconEl.textContent = comp.icon;
+    if (badgeEl) badgeEl.textContent = `#${comp.badgeNum}`;
+    if (titleEl) titleEl.textContent = comp.name;
+    if (catEl) catEl.textContent = comp.categoryName;
+    if (descEl) descEl.textContent = comp.shortDesc;
+
+    if (card) {
+      card.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        card.classList.add('is-visible');
+      });
+    }
+
+    if (focusStatus && focusText) {
+      focusText.textContent = `Enfocando ${comp.name}...`;
+      focusStatus.classList.remove('hidden');
+      clearTimeout(this.cameraFocusTimeout);
+      this.cameraFocusTimeout = setTimeout(() => {
+        focusStatus.classList.add('hidden');
+      }, 2200);
+    }
+  }
+
+  // OCULTAR TARJETA FLOTANTE HUD Y DESMARCAR
+  hideFloatingComponentCard() {
+    const card = document.getElementById('floatingComponentCard');
+    const focusStatus = document.getElementById('cameraFocusStatus');
+    if (focusStatus) focusStatus.classList.add('hidden');
+    if (card) {
+      card.classList.remove('is-visible');
+      setTimeout(() => {
+        card.classList.add('hidden');
+      }, 300);
+    }
+    this.activeComponentId = null;
+    this.highlightActiveComponent(null);
+  }
+
+  // RESALTAR COMPONENTE ACTIVO EN TODOS LOS NIVELES
+  highlightActiveComponent(componentId) {
+    // 1. Chips de navegación inferior
+    document.querySelectorAll('.component-chip').forEach(chip => {
+      if (componentId && chip.getAttribute('data-id') === componentId) {
+        chip.classList.add('is-active');
+        chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } else {
+        chip.classList.remove('is-active');
+      }
+    });
+
+    // 2. Pines 3D si están visibles en model-viewer
+    const mv = document.getElementById('mainModelViewer');
+    if (mv) {
+      mv.querySelectorAll('.hotspot-3d').forEach(pin => {
+        if (componentId && pin.getAttribute('data-id') === componentId) {
+          pin.classList.add('is-active');
+        } else {
+          pin.classList.remove('is-active');
+        }
+      });
+    }
+
+    // 3. Hotspots en SVG (Modo 2D)
+    const svg = document.querySelector('.schematics-svg');
+    if (svg) {
+      svg.querySelectorAll('.hotspot-group').forEach(h => {
+        if (componentId && h.getAttribute('data-id') === componentId) {
+          h.classList.add('is-active');
+        } else {
+          h.classList.remove('is-active');
+        }
+      });
+    }
+  }
+
+  // ENFOQUE CINEMATOGRÁFICO DE CÁMARA 3D HACIA EL COMPONENTE
+  focusComponent3D(componentId) {
+    const modelViewer = document.getElementById('mainModelViewer');
+    if (!modelViewer) return;
+
+    const data = VEHICLES_DATA[this.currentVehicle];
+    const comp = data.components.find(c => c.id === componentId);
+    if (comp && comp.hotspot3d) {
+      if (comp.hotspot3d.cameraTarget) {
+        modelViewer.cameraTarget = comp.hotspot3d.cameraTarget;
+      }
+      if (comp.hotspot3d.cameraOrbit) {
+        modelViewer.cameraOrbit = comp.hotspot3d.cameraOrbit;
+      }
+    }
+  }
+
+  // RESTABLECER CÁMARA 3D A POSICIÓN INICIAL
+  resetCamera3D() {
+    const modelViewer = document.getElementById('mainModelViewer');
+    const data = VEHICLES_DATA[this.currentVehicle];
+    if (modelViewer && data) {
+      modelViewer.cameraTarget = data.cameraDefaultTarget || '0m 0.5m 0m';
+      modelViewer.cameraOrbit = data.cameraDefaultOrbit || '45deg 72deg 4.6m';
+    }
+    this.hideFloatingComponentCard();
+  }
+
+  // ACTIVAR / PAUSAR ROTACIÓN AUTOMÁTICA 360°
+  toggleAutoRotate3D() {
+    const modelViewer = document.getElementById('mainModelViewer');
+    const textRotate = document.getElementById('textRotate3D');
+    const iconRotate = document.getElementById('iconRotate3D');
+    if (!modelViewer) return;
+
+    this.isRotating3D = !this.isRotating3D;
+    modelViewer.autoRotate = this.isRotating3D;
+
+    if (textRotate) {
+      textRotate.textContent = this.isRotating3D ? 'Giro 360°' : 'Pausado';
+    }
+    if (iconRotate) {
+      iconRotate.textContent = this.isRotating3D ? '🌐' : '⏸️';
+    }
+  }
+
+  // RENDERIZADO DEL ESQUEMA VECTORIAL (2D)
   renderSchematic() {
     const data = VEHICLES_DATA[this.currentVehicle];
     const filteredComponents = this.getFilteredComponents();
@@ -284,7 +607,11 @@ class AutoMecaApp {
 
   // APLICAR FILTROS Y BÚSQUEDAS
   applyFilters() {
-    this.renderSchematic();
+    if (this.viewMode === '3d') {
+      this.renderModelViewerHotspots();
+    } else {
+      this.renderSchematic();
+    }
     this.renderComponentChips();
   }
 
@@ -303,7 +630,7 @@ class AutoMecaApp {
     container.innerHTML = components.map(comp => `
       <button 
         data-id="${comp.id}" 
-        class="component-chip px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-xs text-slate-300 hover:text-white flex items-center gap-1.5 transition-all active:scale-95">
+        class="component-chip ${comp.id === this.activeComponentId ? 'is-active' : ''} px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-xs text-slate-300 hover:text-white flex items-center gap-1.5 transition-all active:scale-95">
         <span class="w-4 h-4 rounded-full bg-slate-900 border border-slate-600 flex items-center justify-center text-[10px] font-mono text-cyan-400 font-bold">${comp.badgeNum}</span>
         <span>${comp.name}</span>
       </button>
@@ -311,6 +638,11 @@ class AutoMecaApp {
 
     container.querySelectorAll('.component-chip').forEach(chip => {
       chip.addEventListener('click', () => {
+        const id = chip.getAttribute('data-id');
+        this.selectComponent(id);
+      });
+      // Doble clic o doble toque para abrir ficha técnica directa si se desea
+      chip.addEventListener('dblclick', () => {
         const id = chip.getAttribute('data-id');
         this.openModal(id);
       });
@@ -348,8 +680,11 @@ class AutoMecaApp {
     container.querySelectorAll('.diagnosis-symptom-chip').forEach(btn => {
       btn.addEventListener('click', () => {
         const compId = btn.getAttribute('data-component');
-        // Abrir modal directamente en la pestaña de síntomas
-        this.openModal(compId, 'symptoms');
+        if (this.viewMode === '3d') {
+          this.selectComponent(compId);
+        } else {
+          this.openModal(compId, 'symptoms');
+        }
       });
     });
   }
@@ -361,17 +696,10 @@ class AutoMecaApp {
     if (!component) return;
 
     this.activeComponentId = componentId;
+    this.highlightActiveComponent(componentId);
 
-    // Resaltar en el SVG
-    const svg = document.querySelector('.schematics-svg');
-    if (svg) {
-      svg.querySelectorAll('.hotspot-group').forEach(h => {
-        if (h.getAttribute('data-id') === componentId) {
-          h.classList.add('is-active');
-        } else {
-          h.classList.remove('is-active');
-        }
-      });
+    if (this.viewMode === '3d') {
+      this.focusComponent3D(componentId);
     }
 
     // Poblar datos del modal
@@ -477,13 +805,6 @@ class AutoMecaApp {
       modal.classList.remove('is-open');
       document.body.style.overflow = '';
     }
-
-    // Quitar active del SVG si se desea
-    const svg = document.querySelector('.schematics-svg');
-    if (svg) {
-      svg.querySelectorAll('.hotspot-group').forEach(h => h.classList.remove('is-active'));
-    }
-    this.activeComponentId = null;
   }
 
   // GESTO TÁCTIL SWIPE-DOWN PARA CERRAR BOTTOM SHEET EN MÓVILES
@@ -526,5 +847,6 @@ class AutoMecaApp {
 
 // Inicialización de la aplicación al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
-  window.autoMecaApp = new AutoMecaApp();
+  window.autoFindApp = new AutoFindApp();
+  window.autoMecaApp = window.autoFindApp;
 });

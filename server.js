@@ -1,4 +1,4 @@
-// Servidor HTTP Estático Nativo para AutoMeca Lab PWA
+// Servidor HTTP Estático Nativo para AutoFind Lab PWA
 // Compatible con Node.js y agy-node sin dependencias externas.
 
 const http = require('http');
@@ -18,7 +18,9 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.glb': 'model/gltf-binary',
+  '.gltf': 'model/gltf+json'
 };
 
 const server = http.createServer((req, res) => {
@@ -39,7 +41,7 @@ const server = http.createServer((req, res) => {
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 - Recurso no encontrado en AutoMeca Lab');
+      res.end('404 - Recurso no encontrado en AutoFind Lab');
       return;
     }
 
@@ -76,7 +78,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`=======================================================`);
-  console.log(`🚀 AutoMeca Lab Servidor PWA en ejecución`);
+  console.log(`🚀 AutoFind Lab Servidor PWA en ejecución`);
   console.log(`📡 URL Local: http://localhost:${PORT}`);
   console.log(`📱 Soporte PWA, Service Worker y Modo Offline habilitado`);
   console.log(`=======================================================`);

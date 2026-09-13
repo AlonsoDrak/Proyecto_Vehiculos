@@ -1,6 +1,6 @@
 {
-  "name": "AutoMeca Lab - Anatomía y Averías de Vehículos",
-  "short_name": "AutoMeca",
+  "name": "AutoFind Lab - Anatomía y Averías de Vehículos",
+  "short_name": "AutoFind",
   "description": "Aprende e interactúa con todos los componentes mecánicos y eléctricos de coches de combustión, coches eléctricos y motos urbanas.",
   "start_url": "./",
   "scope": "./",

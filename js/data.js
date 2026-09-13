@@ -8,6 +8,9 @@ const VEHICLES_DATA = {
     subtitle: 'Motor Térmico, Inyección, Refrigeración y Transmisión Mecánica',
     icon: '⛽',
     badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+    model3d: './models/combustion_xray.glb',
+    cameraDefaultOrbit: '45deg 72deg 4.6m',
+    cameraDefaultTarget: '0m 0.5m 0m',
     description: 'Los vehículos de combustión interna (gasolina, diésel o adaptados a gas GLP/GNC) transforman la energía química del carburante en energía mecánica mediante explosiones controladas en los cilindros.',
     components: [
       {
@@ -17,6 +20,12 @@ const VEHICLES_DATA = {
         categoryName: 'Motor y Potencia',
         icon: '⚙️',
         coords: { x: 310, y: 285 },
+        hotspot3d: {
+          position: '0.0m 0.88m -1.05m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.55m -1.05m',
+          cameraOrbit: '-30deg 68deg 2.6m'
+        },
         badgeNum: 1,
         severity: 'critico',
         shortDesc: 'Corazón mecánico que convierte el combustible en energía de tracción.',
@@ -52,6 +61,12 @@ const VEHICLES_DATA = {
         categoryName: 'Refrigeración y Climatización',
         icon: '❄️',
         coords: { x: 190, y: 285 },
+        hotspot3d: {
+          position: '0.0m 0.72m -1.92m',
+          normal: '0m 0.5m -1m',
+          cameraTarget: '0m 0.48m -1.88m',
+          cameraOrbit: '0deg 75deg 2.2m'
+        },
         badgeNum: 2,
         severity: 'critico',
         shortDesc: 'Disipa el calor extremo generado por la combustión para evitar el gripado.',
@@ -86,6 +101,12 @@ const VEHICLES_DATA = {
         categoryName: 'Sistema Eléctrico',
         icon: '⚡',
         coords: { x: 330, y: 235 },
+        hotspot3d: {
+          position: '0.38m 0.65m -0.85m',
+          normal: '1m 0.5m 0m',
+          cameraTarget: '0.32m 0.52m -0.85m',
+          cameraOrbit: '55deg 65deg 2.2m'
+        },
         badgeNum: 3,
         severity: 'alto',
         shortDesc: 'Genera electricidad mientras el motor gira y recarga la batería de 12V.',
@@ -120,6 +141,12 @@ const VEHICLES_DATA = {
         categoryName: 'Sistema Eléctrico',
         icon: '🔋',
         coords: { x: 260, y: 220 },
+        hotspot3d: {
+          position: '-0.48m 0.86m -1.42m',
+          normal: '0m 1m 0m',
+          cameraTarget: '-0.48m 0.72m -1.42m',
+          cameraOrbit: '-55deg 65deg 2.0m'
+        },
         badgeNum: 4,
         severity: 'alto',
         shortDesc: 'Proporciona el pico de corriente necesario para accionar el motor de arranque.',
@@ -154,6 +181,12 @@ const VEHICLES_DATA = {
         categoryName: 'Frenado y Seguridad Activa',
         icon: '🛑',
         coords: { x: 300, y: 395 },
+        hotspot3d: {
+          position: '-0.82m 0.46m -1.35m',
+          normal: '-1m 0.5m 0m',
+          cameraTarget: '-0.78m 0.33m -1.35m',
+          cameraOrbit: '-90deg 75deg 1.8m'
+        },
         badgeNum: 5,
         severity: 'critico',
         shortDesc: 'Detiene el vehículo mediante fricción hidráulica asistida.',
@@ -188,6 +221,12 @@ const VEHICLES_DATA = {
         categoryName: 'Chasis y Suspensión',
         icon: '🛞',
         coords: { x: 275, y: 335 },
+        hotspot3d: {
+          position: '-0.63m 0.75m -1.35m',
+          normal: '-0.7m 0.7m 0m',
+          cameraTarget: '-0.63m 0.52m -1.35m',
+          cameraOrbit: '-65deg 70deg 2.2m'
+        },
         badgeNum: 6,
         severity: 'alto',
         shortDesc: 'Garantiza el contacto constante de los neumáticos con el asfalto y el confort.',
@@ -222,6 +261,12 @@ const VEHICLES_DATA = {
         categoryName: 'Transmisión y Embrague',
         icon: '🕹️',
         coords: { x: 440, y: 285 },
+        hotspot3d: {
+          position: '0.0m 0.60m -0.45m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.44m -0.45m',
+          cameraOrbit: '-45deg 60deg 2.5m'
+        },
         badgeNum: 7,
         severity: 'critico',
         shortDesc: 'Adapta la velocidad de giro del motor a la velocidad deseada de las ruedas.',
@@ -256,6 +301,12 @@ const VEHICLES_DATA = {
         categoryName: 'Escape y Emisiones',
         icon: '💨',
         coords: { x: 740, y: 285 },
+        hotspot3d: {
+          position: '0.12m 0.42m 1.95m',
+          normal: '0m 0.5m 1m',
+          cameraTarget: '0.12m 0.28m 1.82m',
+          cameraOrbit: '160deg 75deg 2.2m'
+        },
         badgeNum: 8,
         severity: 'moderado',
         shortDesc: 'Evacua los gases quemados, reduce el ruido y filtra contaminantes nocivos.',
@@ -290,6 +341,12 @@ const VEHICLES_DATA = {
         categoryName: 'Motor y Potencia',
         icon: '⛽',
         coords: { x: 620, y: 285 },
+        hotspot3d: {
+          position: '0.0m 0.54m 1.15m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.38m 1.15m',
+          cameraOrbit: '-135deg 65deg 2.4m'
+        },
         badgeNum: 9,
         severity: 'alto',
         shortDesc: 'Dosifica con precisión micrométrica el combustible o gas hacia las cámaras.',
@@ -324,6 +381,12 @@ const VEHICLES_DATA = {
         categoryName: 'Chasis y Suspensión',
         icon: '🧭',
         coords: { x: 310, y: 345 },
+        hotspot3d: {
+          position: '0.0m 0.46m -1.30m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.35m -1.30m',
+          cameraOrbit: '-20deg 60deg 2.2m'
+        },
         badgeNum: 10,
         severity: 'critico',
         shortDesc: 'Transmite el giro del volante a las ruedas directrices con mínimo esfuerzo.',
@@ -360,6 +423,9 @@ const VEHICLES_DATA = {
     subtitle: 'Batería de Alto Voltaje, Motor Eléctrico, Inversor y Freno Regenerativo',
     icon: '🔋',
     badgeClass: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+    model3d: './models/electric_xray.glb',
+    cameraDefaultOrbit: '45deg 72deg 4.6m',
+    cameraDefaultTarget: '0m 0.5m 0m',
     description: 'Los coches eléctricos puros (BEV) sustituyen el motor térmico por motores eléctricos de alto rendimiento, propulsados por una gran batería de iones de litio y gestionados por electrónica de potencia de alta eficiencia.',
     components: [
       {
@@ -369,6 +435,12 @@ const VEHICLES_DATA = {
         categoryName: 'Propulsión y Energía Eléctrica',
         icon: '🔋',
         coords: { x: 500, y: 300 },
+        hotspot3d: {
+          position: '0.0m 0.35m 0.0m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.25m 0m',
+          cameraOrbit: '45deg 70deg 3.5m'
+        },
         badgeNum: 1,
         severity: 'critico',
         shortDesc: 'Almacén energético principal de 400V a 800V que alimenta todo el vehículo.',
@@ -403,6 +475,12 @@ const VEHICLES_DATA = {
         categoryName: 'Propulsión y Energía Eléctrica',
         icon: '⚡',
         coords: { x: 300, y: 300 },
+        hotspot3d: {
+          position: '0.0m 0.52m 1.25m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.32m 1.25m',
+          cameraOrbit: '140deg 68deg 2.2m'
+        },
         badgeNum: 2,
         severity: 'critico',
         shortDesc: 'Convierte la energía eléctrica en movimiento con par instantáneo y >90% de eficiencia.',
@@ -437,6 +515,12 @@ const VEHICLES_DATA = {
         categoryName: 'Propulsión y Energía Eléctrica',
         icon: '🎛️',
         coords: { x: 340, y: 240 },
+        hotspot3d: {
+          position: '0.0m 0.70m 1.15m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.52m 1.15m',
+          cameraOrbit: '130deg 60deg 2.0m'
+        },
         badgeNum: 3,
         severity: 'critico',
         shortDesc: 'Transforma la corriente continua de la batería en corriente alterna trifásica para el motor.',
@@ -465,6 +549,12 @@ const VEHICLES_DATA = {
         categoryName: 'Refrigeración y Climatización',
         icon: '❄️',
         coords: { x: 230, y: 300 },
+        hotspot3d: {
+          position: '0.0m 0.65m -1.85m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.44m -1.85m',
+          cameraOrbit: '0deg 75deg 2.2m'
+        },
         badgeNum: 4,
         severity: 'alto',
         shortDesc: 'Mantiene la batería en su rango ideal de temperatura (20°C a 35°C).',
@@ -493,6 +583,12 @@ const VEHICLES_DATA = {
         categoryName: 'Frenado y Seguridad Activa',
         icon: '🛑',
         coords: { x: 270, y: 400 },
+        hotspot3d: {
+          position: '-0.82m 0.46m -1.38m',
+          normal: '-1m 0.5m 0m',
+          cameraTarget: '-0.78m 0.33m -1.38m',
+          cameraOrbit: '-90deg 75deg 1.8m'
+        },
         badgeNum: 5,
         severity: 'critico',
         shortDesc: 'Frena el coche transformando la inercia en electricidad limpia.',
@@ -522,6 +618,12 @@ const VEHICLES_DATA = {
         categoryName: 'Transmisión y Embrague',
         icon: '⚙️',
         coords: { x: 420, y: 300 },
+        hotspot3d: {
+          position: '0.20m 0.50m 1.25m',
+          normal: '1m 0.5m 0m',
+          cameraTarget: '0.20m 0.32m 1.25m',
+          cameraOrbit: '65deg 72deg 2.0m'
+        },
         badgeNum: 6,
         severity: 'moderado',
         shortDesc: 'Reduce las altas revoluciones del motor a la velocidad de giro de las ruedas.',
@@ -550,6 +652,12 @@ const VEHICLES_DATA = {
         categoryName: 'Propulsión y Energía Eléctrica',
         icon: '🔌',
         coords: { x: 740, y: 330 },
+        hotspot3d: {
+          position: '-0.86m 0.82m 1.75m',
+          normal: '-1m 0.5m 0m',
+          cameraTarget: '-0.82m 0.72m 1.75m',
+          cameraOrbit: '-135deg 65deg 2.0m'
+        },
         badgeNum: 7,
         severity: 'alto',
         shortDesc: 'Permite conectar el coche a la red eléctrica doméstica o pública.',
@@ -578,6 +686,12 @@ const VEHICLES_DATA = {
         categoryName: 'Sistema Eléctrico',
         icon: '⚡',
         coords: { x: 260, y: 220 },
+        hotspot3d: {
+          position: '0.35m 0.75m -1.25m',
+          normal: '0.5m 1m 0m',
+          cameraTarget: '0.35m 0.58m -1.25m',
+          cameraOrbit: '45deg 65deg 2.0m'
+        },
         badgeNum: 8,
         severity: 'alto',
         shortDesc: 'Alimenta los ordenadores, faros, airbags y relés de seguridad a 12V.',
@@ -601,6 +715,12 @@ const VEHICLES_DATA = {
         categoryName: 'Chasis y Suspensión',
         icon: '🛞',
         coords: { x: 700, y: 400 },
+        hotspot3d: {
+          position: '-0.65m 0.72m -1.38m',
+          normal: '-0.7m 0.7m 0m',
+          cameraTarget: '-0.65m 0.48m -1.38m',
+          cameraOrbit: '-65deg 70deg 2.2m'
+        },
         badgeNum: 9,
         severity: 'alto',
         shortDesc: 'Absorbe el impacto de un vehículo sensiblemente más pesado con calibración adaptativa.',
@@ -631,6 +751,9 @@ const VEHICLES_DATA = {
     subtitle: 'Motor Monocilíndrico 4T, Inyección/Carburador, Transmisión por Cadena/CVT y Frenado Ligero',
     icon: '🛵',
     badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+    model3d: './models/moto_xray.glb',
+    cameraDefaultOrbit: '45deg 72deg 2.6m',
+    cameraDefaultTarget: '0m 0.55m 0m',
     description: 'Las motocicletas y scooters de uso diario (125cc a 300cc) combinan agilidad, ligereza y eficiencia para el transporte urbano, con componentes mecánicos expuestos que requieren inspección visual frecuente.',
     components: [
       {
@@ -640,6 +763,12 @@ const VEHICLES_DATA = {
         categoryName: 'Motor y Potencia',
         icon: '⚙️',
         coords: { x: 450, y: 350 },
+        hotspot3d: {
+          position: '0.0m 0.60m -0.05m',
+          normal: '0.5m 0.5m 0m',
+          cameraTarget: '0m 0.42m -0.05m',
+          cameraOrbit: '65deg 70deg 1.6m'
+        },
         badgeNum: 1,
         severity: 'critico',
         shortDesc: 'Propulsor compacto de alta eficiencia con cárter compartido de lubricación.',
@@ -674,6 +803,12 @@ const VEHICLES_DATA = {
         categoryName: 'Transmisión y Embrague',
         icon: '⛓️',
         coords: { x: 370, y: 410 },
+        hotspot3d: {
+          position: '-0.12m 0.42m 0.40m',
+          normal: '-1m 0.3m 0m',
+          cameraTarget: '-0.08m 0.30m 0.40m',
+          cameraOrbit: '-80deg 75deg 1.6m'
+        },
         badgeNum: 2,
         severity: 'alto',
         shortDesc: 'Transfiere la fuerza del motor a la rueda trasera.',
@@ -708,6 +843,12 @@ const VEHICLES_DATA = {
         categoryName: 'Chasis y Suspensión',
         icon: '🏍️',
         coords: { x: 740, y: 350 },
+        hotspot3d: {
+          position: '0.0m 0.80m -0.68m',
+          normal: '0.5m 0.5m -0.5m',
+          cameraTarget: '0m 0.65m -0.68m',
+          cameraOrbit: '35deg 70deg 1.8m'
+        },
         badgeNum: 3,
         severity: 'critico',
         shortDesc: 'Determina la estabilidad, el paso por curva y el control de la dirección.',
@@ -737,6 +878,12 @@ const VEHICLES_DATA = {
         categoryName: 'Frenado y Seguridad Activa',
         icon: '🛑',
         coords: { x: 780, y: 440 },
+        hotspot3d: {
+          position: '0.12m 0.42m -0.85m',
+          normal: '1m 0.5m 0m',
+          cameraTarget: '0.08m 0.30m -0.85m',
+          cameraOrbit: '75deg 75deg 1.4m'
+        },
         badgeNum: 4,
         severity: 'critico',
         shortDesc: 'Detiene la motocicleta de forma controlada sin bloquear la rueda delantera.',
@@ -771,6 +918,12 @@ const VEHICLES_DATA = {
         categoryName: 'Refrigeración y Climatización',
         icon: '❄️',
         coords: { x: 570, y: 340 },
+        hotspot3d: {
+          position: '0.0m 0.66m -0.42m',
+          normal: '0m 0.5m -1m',
+          cameraTarget: '0m 0.52m -0.42m',
+          cameraOrbit: '0deg 75deg 1.5m'
+        },
         badgeNum: 5,
         severity: 'alto',
         shortDesc: 'Controla la temperatura térmica del cilindro en atascos y semáforos.',
@@ -800,6 +953,12 @@ const VEHICLES_DATA = {
         categoryName: 'Motor y Potencia',
         icon: '⛽',
         coords: { x: 490, y: 300 },
+        hotspot3d: {
+          position: '0.0m 0.90m -0.15m',
+          normal: '0m 1m 0m',
+          cameraTarget: '0m 0.75m -0.15m',
+          cameraOrbit: '45deg 60deg 1.7m'
+        },
         badgeNum: 6,
         severity: 'alto',
         shortDesc: 'Pulveriza la mezcla óptima de aire y gasolina para el monocilíndrico.',
@@ -829,6 +988,12 @@ const VEHICLES_DATA = {
         categoryName: 'Sistema Eléctrico',
         icon: '🔋',
         coords: { x: 440, y: 250 },
+        hotspot3d: {
+          position: '0.0m 0.70m 0.22m',
+          normal: '-0.5m 0.8m 0m',
+          cameraTarget: '0m 0.58m 0.22m',
+          cameraOrbit: '-45deg 65deg 1.5m'
+        },
         badgeNum: 7,
         severity: 'alto',
         shortDesc: 'Suministra energía al motor de arranque y estabiliza el voltaje.',
@@ -857,6 +1022,12 @@ const VEHICLES_DATA = {
         categoryName: 'Escape y Emisiones',
         icon: '💨',
         coords: { x: 260, y: 440 },
+        hotspot3d: {
+          position: '0.22m 0.48m 0.50m',
+          normal: '1m 0.5m 0m',
+          cameraTarget: '0.15m 0.36m 0.50m',
+          cameraOrbit: '110deg 72deg 1.6m'
+        },
         badgeNum: 8,
         severity: 'moderado',
         shortDesc: 'Canaliza los gases tóxicos, atenúa el sonido y protege de quemaduras.',
@@ -885,6 +1056,12 @@ const VEHICLES_DATA = {
         categoryName: 'Chasis y Suspensión',
         icon: '🧭',
         coords: { x: 670, y: 190 },
+        hotspot3d: {
+          position: '0.0m 1.08m -0.52m',
+          normal: '0m 1m -0.5m',
+          cameraTarget: '0m 0.94m -0.52m',
+          cameraOrbit: '0deg 55deg 1.5m'
+        },
         badgeNum: 9,
         severity: 'critico',
         shortDesc: 'Interfaz táctil del piloto para dirigir, acelerar, embragar e iluminar.',
