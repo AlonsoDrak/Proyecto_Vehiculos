@@ -54,12 +54,16 @@ const server = http.createServer((req, res) => {
       'Access-Control-Allow-Origin': '*'
     };
 
-    // Si es el Service Worker o el Manifest, evitar caché agresiva para permitir actualizaciones inmediatas
+    // Si es el Service Worker, Manifest o Modelos 3D, evitar caché agresiva para actualizaciones instantáneas
     if (pathname === '/sw.js') {
       headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
       headers['Service-Worker-Allowed'] = '/';
     } else if (pathname === '/manifest.json') {
       headers['Cache-Control'] = 'no-cache';
+    } else if (ext === '.glb') {
+      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      headers['Pragma'] = 'no-cache';
+      headers['Expires'] = '0';
     }
 
     res.writeHead(200, headers);

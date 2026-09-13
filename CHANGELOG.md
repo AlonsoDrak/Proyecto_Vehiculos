@@ -65,11 +65,16 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Inclusión del atributo `disable-pan` en `<model-viewer>` para impedir que gestos de pellizco para zoom o contactos multitáctiles accidentales desplacen el centro de cámara (`camera-target`). El vehículo permanece perfectamente centrado en todo momento en teléfonos móviles, exactamente igual que en PC.
 - **Aislamiento de Gestos Táctiles Verticales (`touch-action: none`)**:
   - Establecimiento de `touch-action="none"` y `overscroll-behavior: contain` en el lienzo 3D. Deslizar verticalmente con el dedo sobre el vehículo ahora inclina el modelo en 3D en lugar de hacer scroll accidental en la página web. El desplazamiento vertical de la página queda reservado para arrastrar fuera del visor (cabecera, pestañas, selector de piezas o márgenes).
-- **Corrección de Líneas Negras en Ruedas del Coche Eléctrico**:
-  - Eliminación de los insertos de turbina con aspas negras en el eje de las ruedas de `electric_xray.glb`, que creaban un artefacto visual de falso movimiento indeseado. Se instalaron llantas deportivas estáticas de aleación con 5 radios de aluminio pulido y tapa de buje central idénticas a las del coche de gas.
-- **Rediseño Minimalista de Iconos de Marca AutoFind**:
-  - Creación del nuevo logotipo vectorial en `icons/icon.svg` con silueta aerodinámica limpia combinada con retícula/lupa de diagnóstico y enfoque.
-  - Regeneración con renderizado nítido de los iconos de aplicación `icon-192.png` y `icon-512.png`, además del nuevo icono de lupa automotriz en el encabezado de `index.html`.
+- **Corrección Definitiva de Ruedas Estáticas en Coche Eléctrico (EV)**:
+  - Eliminación total de líneas, aspas o marcas oscuras en las ruedas de `electric_xray.glb`: se instaló una configuración 100% de aluminio pulido estático (`#e2e8f0`) tanto en llantas como en los 5 radios y la tapa central de buje, idénticas a las del modelo de gas.
+  - Implementación de invalidación de caché forzada con query string de versión (`?v=1.4.0`) en `js/data.js` para los 3 modelos 3D (`combustion_xray.glb`, `electric_xray.glb`, `moto_xray.glb`).
+  - Estrategia *Network-First* en `sw.js` (versión `autofind-v1.4.0-clean`) exclusiva para archivos `.glb`, garantizando que dispositivos móviles y navegadores descarguen siempre la versión más reciente en línea mientras mantienen disponibilidad sin conexión.
+  - Encabezados HTTP `Cache-Control: no-cache, no-store, must-revalidate` y `Pragma: no-cache` en `server.js` para servir los modelos 3D en tiempo real sin almacenamiento intermedio persistente.
+- **Rediseño Iconográfico Minimalista 100% Simétrico de AutoFind**:
+  - Creación de un nuevo diseño de logotipo de alta gama con perfecta simetría matemática axial ($X = 256$) en `icons/icon.svg`.
+  - Silueta frontal hiperdeportiva aerodinámica con barra lumínica continua horizonte (Laser DRL Lightbar), ópticas Matrix LED, splitter inferior y retícula circular óptica HUD de calibración milimétrica con ticks ortogonales en los 4 ejes cardinales.
+  - Renderizado en alta fidelidad para `icons/icon-192.png` y `icons/icon-512.png` sin asimetrías ni deformaciones ("chueco").
+  - Integración del nuevo logotipo oficial como emblema de marca en la barra de navegación de `index.html`.
 - **Alineación Concéntrica Carrocería vs Chasis (Efecto Rayos X)**:
   - Corrección en la orientación angular y centrado automático en el eje X para el capó, cabina y maletero extruidos.
   - Se eliminó el desfase lateral y angular que situaba la carrocería translúcida azul al costado derecho del chasis, logrando que la silueta holográfica envuelva de forma concéntrica y precisa (`Mid X: 0.000`) todos los componentes mecánicos, ruedas, suspensión y habitáculo interior.

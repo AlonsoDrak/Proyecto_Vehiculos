@@ -1,74 +1,112 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
+    <!-- Fondo degrade profundo calidad retina -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#080c15" />
-      <stop offset="50%" stop-color="#0e172a" />
-      <stop offset="100%" stop-color="#082f49" />
+      <stop offset="0%" stop-color="#050813" />
+      <stop offset="50%" stop-color="#091024" />
+      <stop offset="100%" stop-color="#08223d" />
     </linearGradient>
-    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- Gradiente cian neón de alta luminiscencia -->
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00f2fe" />
       <stop offset="50%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#00f2fe" />
     </linearGradient>
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#06b6d4" />
+
+    <!-- Gradiente vidrio cabina -->
+    <linearGradient id="cabinGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#041226" stop-opacity="0.9" />
     </linearGradient>
+
+    <!-- Gradiente carrocería -->
+    <linearGradient id="bodyMetallic" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#172b4d" />
+      <stop offset="100%" stop-color="#0a1224" />
+    </linearGradient>
+
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="6" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
+    <filter id="softAura" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+    </filter>
   </defs>
 
-  <!-- Contenedor squircle profundo -->
+  <!-- Contenedor squircle perfecto -->
   <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
-  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.3" />
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.2" />
 
-  <!-- 1. RETÍCULA DE BÚSQUEDA Y DIAGNÓSTICO (FIND / SCAN) -->
-  <g id="finder-hud">
-    <!-- Círculo de radar exterior tenue -->
-    <circle cx="256" cy="226" r="142" fill="none" stroke="#0ea5e9" stroke-width="1.5" stroke-opacity="0.25" stroke-dasharray="8, 10" />
-    
-    <!-- Lente / Retícula óptica principal -->
-    <circle cx="256" cy="226" r="118" fill="rgba(14, 165, 233, 0.03)" stroke="url(#cyanGlow)" stroke-width="3.5" stroke-opacity="0.85" filter="url(#glow)" />
+  <!-- RETÍCULA HUD DE PRECISIÓN (FINDER) - Centro exacto: (256, 256) -->
+  <g id="finder-scope">
+    <!-- Círculo de radar exterior fino -->
+    <circle cx="256" cy="256" r="184" fill="none" stroke="#0ea5e9" stroke-width="1.5" stroke-opacity="0.15" stroke-dasharray="8, 12" />
 
-    <!-- Marcas de calibración / Ticks ortogonales -->
-    <line x1="256" y1="94" x2="256" y2="114" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" />
-    <line x1="256" y1="338" x2="256" y2="358" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" />
-    <line x1="124" y1="226" x2="144" y2="226" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" />
-    <line x1="368" y1="226" x2="388" y2="226" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" />
+    <!-- Lente de enfoque óptico principal con brillo cian -->
+    <circle cx="256" cy="256" r="150" fill="rgba(14, 165, 233, 0.03)" stroke="url(#neonCyan)" stroke-width="2" stroke-opacity="0.45" />
 
-    <!-- Corchetes angulares de enfoque HUD -->
-    <path d="M 162,154 L 146,154 L 146,170" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8" />
-    <path d="M 350,154 L 366,154 L 366,170" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8" />
-    <path d="M 146,282 L 146,298 L 162,298" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8" />
-    <path d="M 366,282 L 366,298 L 350,298" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8" />
+    <!-- 4 Ticks ortogonales cardinales de alta precisión (100% simétricos) -->
+    <line x1="256" y1="88" x2="256" y2="114" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+    <line x1="256" y1="398" x2="256" y2="424" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+    <line x1="88" y1="256" x2="114" y2="256" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+    <line x1="398" y1="256" x2="424" y2="256" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Corchetes angulares HUD en las 4 esquinas del radar -->
+    <path d="M 136,168 L 120,168 L 120,184" stroke="#00f2fe" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6" />
+    <path d="M 376,168 L 392,168 L 392,184" stroke="#00f2fe" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6" />
+    <path d="M 120,328 L 120,344 L 136,344" stroke="#00f2fe" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6" />
+    <path d="M 392,328 L 392,344 L 376,344" stroke="#00f2fe" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6" />
   </g>
 
-  <!-- 2. SILUETA AERODINÁMICA MINIMALISTA DEL VEHÍCULO (AUTO) -->
-  <g id="car-silhouette">
-    <!-- Línea de techo y carrocería fluida aerodinámica -->
-    <path d="M 162,246 C 176,242 198,232 222,210 C 242,192 268,188 296,190 C 322,192 342,206 352,222 C 360,234 368,240 376,244 L 372,252 C 362,252 352,252 344,252 C 341,238 328,228 314,230 C 300,232 290,245 292,252 L 220,252 C 217,238 204,228 190,230 C 176,232 166,245 168,252 Z" 
-          fill="url(#cyanGlow)" filter="url(#glow)" />
+  <!-- SILUETA HIPERDEPORTIVA FRONTAL (100% Simétrica sobre eje vertical X = 256) -->
+  <g id="hypercar-silhouette">
+    <!-- Aura lumínica ambiental -->
+    <ellipse cx="256" cy="272" rx="140" ry="46" fill="#00f2fe" fill-opacity="0.12" filter="url(#softAura)" />
 
-    <!-- Ventana / Cabina de cristal minimalista -->
-    <path d="M 230,211 C 244,198 266,195 292,197 C 312,199 326,208 335,221 L 236,221 Z" 
-          fill="#080c15" />
+    <!-- 1. Cúpula de Cabina / Parabrisas Aerodinámico -->
+    <path d="M 214,186 
+             C 232,180 280,180 298,186 
+             C 318,192 338,216 352,240 
+             C 300,234 212,234 160,240 
+             C 174,216 194,192 214,186 Z" 
+          fill="url(#cabinGlass)" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.8" />
 
-    <!-- Rueda Delantera deportiva -->
-    <circle cx="201" cy="252" r="17" fill="#080c15" stroke="url(#cyanGlow)" stroke-width="3" />
-    <circle cx="201" cy="252" r="5" fill="#38bdf8" />
+    <!-- Pilares A elegantes -->
+    <line x1="228" y1="188" x2="186" y2="238" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5" />
+    <line x1="284" y1="188" x2="326" y2="238" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5" />
 
-    <!-- Rueda Trasera deportiva -->
-    <circle cx="311" cy="252" r="17" fill="#080c15" stroke="url(#cyanGlow)" stroke-width="3" />
-    <circle cx="311" cy="252" r="5" fill="#38bdf8" />
+    <!-- 2. Carrocería Esculpida y Hombros Anchos -->
+    <path d="M 256,232 
+             C 292,232 344,236 364,244 
+             C 382,252 390,264 390,278 
+             C 390,296 376,306 354,306 
+             L 342,306 
+             L 336,298 
+             L 176,298 
+             L 170,306 
+             L 158,306 
+             C 136,306 122,296 122,278 
+             C 122,264 130,252 148,244 
+             C 168,236 220,232 256,232 Z" 
+          fill="url(#bodyMetallic)" stroke="url(#neonCyan)" stroke-width="2.5" />
 
-    <!-- Haz de escaneo láser / Punto focal de detección -->
-    <circle cx="256" cy="226" r="4" fill="#ffffff" filter="url(#glow)" />
-    <line x1="218" y1="226" x2="294" y2="226" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4, 4" opacity="0.8" />
+    <!-- Neumáticos anchos en los extremos -->
+    <rect x="124" y="278" width="16" height="26" rx="4" fill="#040813" stroke="#1e293b" stroke-width="1.5" />
+    <rect x="372" y="278" width="16" height="26" rx="4" fill="#040813" stroke="#1e293b" stroke-width="1.5" />
+
+    <!-- 3. Splitter Aerodinámico Inferior -->
+    <path d="M 166,308 L 346,308 L 354,314 L 158,314 Z" fill="#030712" stroke="#0ea5e9" stroke-width="1" />
+
+    <!-- 4. Barra de Luz Continua DRL Láser (Línea pura sin marcas raras) -->
+    <line x1="140" y1="264" x2="372" y2="264" stroke="url(#neonCyan)" stroke-width="3.5" stroke-linecap="round" filter="url(#glow)" />
+
+    <!-- Faros Matrix LED en los extremos -->
+    <polygon points="140,260 190,259 184,268 142,268" fill="#ffffff" filter="url(#glow)" />
+    <polygon points="372,260 322,259 328,268 370,268" fill="#ffffff" filter="url(#glow)" />
+
+    <!-- Entrada de refrigeración inferior -->
+    <polygon points="216,280 296,280 286,296 226,296" fill="#040711" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.8" />
   </g>
-
-  <!-- 3. TIPOGRAFÍA MINIMALISTA AUTOFIND -->
-  <text x="256" y="435" text-anchor="middle" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="800" letter-spacing="8">AUTOFIND</text>
-  <text x="256" y="462" text-anchor="middle" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="5">LAB</text>
 </svg>

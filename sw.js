@@ -1,5 +1,5 @@
 // Service Worker para AutoFind Lab PWA (Optimizado para GitHub Pages y Localhost)
-const CACHE_NAME = 'autofind-v1.3.1-3d';
+const CACHE_NAME = 'autofind-v1.4.0-clean';
 
 // Recursos relativos al scope del Service Worker
 const RELATIVE_ASSETS = [
@@ -51,7 +51,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch: Estrategia Stale-While-Revalidate / Cache-First para soporte offline
+// Fetch: Network-First para modelos 3D (.glb) y Stale-While-Revalidate para el resto
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
@@ -59,8 +59,24 @@ self.addEventListener('fetch', (event) => {
 
   // Mismo origen (Localhost o dominio de GitHub Pages)
   if (url.origin === location.origin) {
+    // Modelos 3D (.glb): Network-First para garantizar modelos actualizados sin problemas de caché
+    if (url.pathname.endsWith('.glb')) {
+      event.respondWith(
+        fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const clone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            }
+            return networkResponse;
+          })
+          .catch(() => caches.match(event.request))
+      );
+      return;
+    }
+
     event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+      caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
           // Actualización de fondo
           fetch(event.request)
