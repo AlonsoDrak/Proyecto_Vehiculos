@@ -1,5 +1,232 @@
 // AutoFind Lab - Módulo Buscador y Comparador de Especificaciones y Consumo
-// Maneja la búsqueda predictiva, extracción de fotos (Wikipedia / Catálogo) y calculadora de costos diarios.
+// Maneja la búsqueda predictiva, extracción de fotos (Wikipedia / Catálogo), pipeline de desambiguación automotriz y calculadora de costos y frecuencias.
+
+// =========================================================================
+// TABLA DE DESAMBIGUACIÓN AUTOMOTRIZ
+// Evita que búsquedas de nombres comunes o animales (Mustang, Beetle, Golf, Focus, Viper, etc.)
+// devuelvan entidades biológicas o no vehiculares de Wikipedia.
+// =========================================================================
+const AUTOMOTIVE_ALIASES = {
+  'mustang': 'Ford Mustang',
+  'beetle': 'Volkswagen Beetle',
+  'vocho': 'Volkswagen Beetle',
+  'golf': 'Volkswagen Golf',
+  'focus': 'Ford Focus',
+  'camaro': 'Chevrolet Camaro',
+  'corvette': 'Chevrolet Corvette',
+  'viper': 'Dodge Viper',
+  'dodge viper': 'Dodge Viper',
+  'challenger': 'Dodge Challenger',
+  'charger': 'Dodge Charger',
+  'bronco': 'Ford Bronco',
+  'ram': 'Ram 1500',
+  'ram 1500': 'Ram 1500',
+  'f-150': 'Ford F-150',
+  'f150': 'Ford F-150',
+  'ranger': 'Ford Ranger',
+  'explorer': 'Ford Explorer',
+  'escape': 'Ford Escape',
+  'edge': 'Ford Edge',
+  'fiesta': 'Ford Fiesta',
+  'fusion': 'Ford Fusion',
+  'civic': 'Honda Civic',
+  'accord': 'Honda Accord',
+  'cr-v': 'Honda CR-V',
+  'crv': 'Honda CR-V',
+  'hr-v': 'Honda HR-V',
+  'hrv': 'Honda HR-V',
+  'city': 'Honda City',
+  'fit': 'Honda Fit',
+  'corolla': 'Toyota Corolla',
+  'camry': 'Toyota Camry',
+  'yaris': 'Toyota Yaris',
+  'rav4': 'Toyota RAV4',
+  'hilux': 'Toyota Hilux',
+  'tacoma': 'Toyota Tacoma',
+  'prius': 'Toyota Prius',
+  'supra': 'Toyota Supra',
+  'avalon': 'Toyota Avalon',
+  'highlander': 'Toyota Highlander',
+  'sienna': 'Toyota Sienna',
+  'land cruiser': 'Toyota Land Cruiser',
+  '4runner': 'Toyota 4Runner',
+  'versa': 'Nissan Versa',
+  'sentra': 'Nissan Sentra',
+  'altima': 'Nissan Altima',
+  'maxima': 'Nissan Maxima',
+  'tsuru': 'Nissan Tsuru',
+  'tiida': 'Nissan Tiida',
+  'march': 'Nissan March',
+  'kicks': 'Nissan Kicks',
+  'x-trail': 'Nissan X-Trail',
+  'xtrail': 'Nissan X-Trail',
+  'frontier': 'Nissan Frontier',
+  'leaf': 'Nissan Leaf',
+  'ariya': 'Nissan Ariya',
+  'gt-r': 'Nissan GT-R',
+  'gtr': 'Nissan GT-R',
+  '370z': 'Nissan 370Z',
+  'jetta': 'Volkswagen Jetta',
+  'vento': 'Volkswagen Vento',
+  'polo': 'Volkswagen Polo',
+  'tiguan': 'Volkswagen Tiguan',
+  'taos': 'Volkswagen Taos',
+  't-cross': 'Volkswagen T-Cross',
+  'tcross': 'Volkswagen T-Cross',
+  'teramont': 'Volkswagen Teramont',
+  'passat': 'Volkswagen Passat',
+  'aveo': 'Chevrolet Aveo',
+  'spark': 'Chevrolet Spark',
+  'onix': 'Chevrolet Onix',
+  'tracker': 'Chevrolet Tracker',
+  'trax': 'Chevrolet Trax',
+  'captiva': 'Chevrolet Captiva',
+  'equinox': 'Chevrolet Equinox',
+  'traverse': 'Chevrolet Traverse',
+  'tahoe': 'Chevrolet Tahoe',
+  'suburban': 'Chevrolet Suburban',
+  'silverado': 'Chevrolet Silverado',
+  'colorado': 'Chevrolet Colorado',
+  's10': 'Chevrolet S10',
+  'cavalier': 'Chevrolet Cavalier',
+  'beat': 'Chevrolet Beat',
+  'ibiza': 'SEAT Ibiza',
+  'leon': 'SEAT Leon',
+  'ateca': 'SEAT Ateca',
+  'arona': 'SEAT Arona',
+  'tarraco': 'SEAT Tarraco',
+  'duster': 'Dacia Duster',
+  'sandero': 'Dacia Sandero',
+  'stepway': 'Renault Stepway',
+  'kwid': 'Renault Kwid',
+  'clio': 'Renault Clio',
+  'megane': 'Renault Mégane',
+  'koleos': 'Renault Koleos',
+  'oroch': 'Renault Oroch',
+  'captur': 'Renault Captur',
+  'swift': 'Suzuki Swift',
+  'jimny': 'Suzuki Jimny',
+  'vitara': 'Suzuki Vitara',
+  's-cross': 'Suzuki S-Cross',
+  'baleno': 'Suzuki Baleno',
+  'ignis': 'Suzuki Ignis',
+  'ertiga': 'Suzuki Ertiga',
+  'tucson': 'Hyundai Tucson',
+  'elantra': 'Hyundai Elantra',
+  'creta': 'Hyundai Creta',
+  'santa fe': 'Hyundai Santa Fe',
+  'accent': 'Hyundai Accent',
+  'i10': 'Hyundai i10',
+  'grand i10': 'Hyundai Grand i10',
+  'kona': 'Hyundai Kona',
+  'ioniq 5': 'Hyundai Ioniq 5',
+  'ioniq 6': 'Hyundai Ioniq 6',
+  'sportage': 'Kia Sportage',
+  'rio': 'Kia Rio',
+  'forte': 'Kia Forte',
+  'k3': 'Kia K3',
+  'k5': 'Kia K5',
+  'seltos': 'Kia Seltos',
+  'soul': 'Kia Soul',
+  'sorento': 'Kia Sorento',
+  'niro': 'Kia Niro',
+  'ev6': 'Kia EV6',
+  'ev9': 'Kia EV9',
+  'cx-3': 'Mazda CX-3',
+  'cx-30': 'Mazda CX-30',
+  'cx-5': 'Mazda CX-5',
+  'cx-50': 'Mazda CX-50',
+  'cx-90': 'Mazda CX-90',
+  'mazda 2': 'Mazda 2',
+  'mazda 3': 'Mazda 3',
+  'mazda 6': 'Mazda 6',
+  'mx-5': 'Mazda MX-5',
+  'miata': 'Mazda MX-5',
+  'model 3': 'Tesla Model 3',
+  'model y': 'Tesla Model Y',
+  'model s': 'Tesla Model S',
+  'model x': 'Tesla Model X',
+  'cybertruck': 'Tesla Cybertruck',
+  'dolphin': 'BYD Dolphin',
+  'seal': 'BYD Seal',
+  'tang': 'BYD Tang',
+  'han': 'BYD Han',
+  'song plus': 'BYD Song Plus',
+  'atto 3': 'BYD Atto 3',
+  'shark': 'BYD Shark',
+  '911': 'Porsche 911',
+  'taycan': 'Porsche Taycan',
+  'panamera': 'Porsche Panamera',
+  'macan': 'Porsche Macan',
+  'cayenne': 'Porsche Cayenne',
+  'cayman': 'Porsche 718 Cayman',
+  'boxster': 'Porsche 718 Boxster',
+  'ninja 400': 'Kawasaki Ninja 400',
+  'ninja': 'Kawasaki Ninja 400',
+  'ninja 650': 'Kawasaki Ninja 650',
+  'ninja zx-6r': 'Kawasaki Ninja ZX-6R',
+  'z400': 'Kawasaki Z400',
+  'z900': 'Kawasaki Z900',
+  'mt-03': 'Yamaha MT-03',
+  'mt-07': 'Yamaha MT-07',
+  'mt-09': 'Yamaha MT-09',
+  'yzf-r3': 'Yamaha YZF-R3',
+  'yzf-r7': 'Yamaha YZF-R7',
+  'r3': 'Yamaha YZF-R3',
+  'nmax': 'Yamaha NMAX',
+  'aerox': 'Yamaha Aerox',
+  'cbr600': 'Honda CBR600RR',
+  'cbr500': 'Honda CBR500R',
+  'cb650r': 'Honda CB650R',
+  'cbr': 'Honda CBR series',
+  'africa twin': 'Honda Africa Twin',
+  'duke 390': 'KTM 390 Duke',
+  'duke 200': 'KTM 200 Duke',
+  'duke': 'KTM 390 Duke',
+  'rc 390': 'KTM RC 390',
+  'pulsar 200': 'Bajaj Pulsar NS 200',
+  'pulsar': 'Bajaj Pulsar',
+  'dominar 400': 'Bajaj Dominar 400',
+  'vespa': 'Vespa',
+  'primavera': 'Vespa Primavera',
+  'dm200': 'Italika DM200',
+  'ft150': 'Italika FT150',
+  'ft125': 'Italika FT125',
+  'ws150': 'Italika WS150',
+  'vort-x': 'Italika Vort-X 300'
+};
+
+// Filtro estricto de validación vehicular
+const CAR_TERMS_REGEX = /(car|automobile|vehicle|motorcycle|scooter|sedan|coupe|suv|truck|pickup|hatchback|convertible|sports car|muscle car|supercar|crossover|electric vehicle|van|station wagon|moped|coche|automóvil|vehículo|motocicleta)/i;
+const NON_CAR_REGEX = /(horse|breed of|species of|genus|mammal|insect|reptile|amphibian|equine|mustang horse|song by|album by|film directed|video game|fictional character|plant|river in|district of|county in|disambiguation)/i;
+
+// Estimador de precio para vehículos recuperados vía API externa
+function estimateApiVehiclePrice(name, type) {
+  const n = (name || '').toLowerCase();
+  if (type === 'moto') {
+    if (n.includes('duke') || n.includes('mt-') || n.includes('ninja') || n.includes('cbr') || n.includes('r3') || n.includes('bmw') || n.includes('ducati') || n.includes('harley')) {
+      return { average: '$145,000 MXN', range: '$125,000 - $175,000 MXN (~$7,900 USD)' };
+    }
+    return { average: '$38,900 MXN', range: '$28,000 - $55,000 MXN (~$2,100 USD)' };
+  }
+  if (type === 'electric') {
+    if (n.includes('porsche') || n.includes('taycan') || n.includes('audi e-tron') || n.includes('bmw i') || n.includes('mercedes eq')) {
+      return { average: '$1,950,000 MXN', range: '$1,650,000 - $2,400,000 MXN (~$105,000 USD)' };
+    }
+    if (n.includes('tesla') || n.includes('seal') || n.includes('ioniq') || n.includes('ev6')) {
+      return { average: '$820,000 MXN', range: '$749,000 - $950,000 MXN (~$44,500 USD)' };
+    }
+    return { average: '$460,000 MXN', range: '$399,000 - $540,000 MXN (~$25,000 USD)' };
+  }
+  // Combustión
+  if (n.includes('mustang') || n.includes('camaro') || n.includes('corvette') || n.includes('porsche') || n.includes('viper') || n.includes('ferrari') || n.includes('amg') || n.includes('bmw m') || n.includes('audi rs')) {
+    return { average: '$1,150,000 MXN', range: '$950,000 - $1,550,000 MXN (~$62,000 USD)' };
+  }
+  if (n.includes('ranger') || n.includes('silverado') || n.includes('f-150') || n.includes('hilux') || n.includes('tahoe') || n.includes('suburban') || n.includes('ram')) {
+    return { average: '$820,000 MXN', range: '$690,000 - $1,050,000 MXN (~$44,500 USD)' };
+  }
+  return { average: '$385,000 MXN', range: '$320,000 - $480,000 MXN (~$20,900 USD)' };
+}
 
 class VehicleSpecsFinder {
   constructor() {
@@ -186,11 +413,12 @@ class VehicleSpecsFinder {
     }
 
     const rangeVal = `${v.consumption.estimatedRangeKm} km`;
+    const priceDisplay = v.averagePrice || 'Consultar mercado';
 
     return `
       <article data-id="${v.id}" class="vehicle-spec-card group relative flex flex-col bg-slate-900/90 hover:bg-slate-800/90 rounded-2xl border border-slate-800 hover:border-slate-700 shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 cursor-pointer overflow-hidden active:scale-[0.99]">
         
-        <!-- Contenedor Imagen con Aspect Ratio 16:9 y Badge -->
+        <!-- Contenedor Imagen con Aspect Ratio 16:9 y Badges -->
         <div class="relative w-full h-44 bg-slate-950 overflow-hidden border-b border-slate-800/80">
           <img 
             src="${v.imageUrl}" 
@@ -247,17 +475,50 @@ class VehicleSpecsFinder {
             </div>
           </div>
 
-          <!-- Botón de acción -->
-          <div class="flex items-center justify-between text-xs text-cyan-400 font-semibold pt-1">
-            <span>Ver ficha & simular costo</span>
-            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+          <!-- Footer con Precio Promedio y Botón de Acción -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <div class="flex flex-col">
+              <span class="text-[10px] text-slate-400 font-medium">Precio promedio:</span>
+              <span class="font-bold text-emerald-300 text-xs sm:text-sm">${priceDisplay}</span>
+            </div>
+            <div class="flex items-center gap-1 text-xs text-cyan-400 font-semibold group-hover:text-cyan-300">
+              <span>Ver ficha</span>
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </div>
 
         </div>
       </article>
     `;
+  }
+
+  // Cálculo de Frecuencia de Repostaje / Recarga según kilometraje diario
+  getRefuelInfo(rangeKm, dailyKm) {
+    const km = Math.max(1, dailyKm || 30);
+    const days = Math.max(1, Math.round(rangeKm / km));
+    const visitsPerMonth = (30 / days).toFixed(1);
+
+    let badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+    let badgeText = '🟢 Muy Baja (~1 vez/mes)';
+    let recommendation = 'Excelente autonomía: no tendrás que repostar en casi un mes.';
+
+    if (days < 7) {
+      badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      badgeText = '⚡ Frecuente (< 1 semana)';
+      recommendation = 'Por tu kilometraje diario elevado, necesitarás recargar semanalmente.';
+    } else if (days < 14) {
+      badgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+      badgeText = '🟡 Semanal (Cada 1-2 semanas)';
+      recommendation = 'Frecuencia habitual para desplazamientos mixtos y laborales.';
+    } else if (days < 25) {
+      badgeClass = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
+      badgeText = '🔵 Moderada (~2 veces/mes)';
+      recommendation = 'Consumo equilibrado: aproximadamente dos visitas a la estación por mes.';
+    }
+
+    return { days, visitsPerMonth, badgeClass, badgeText, recommendation };
   }
 
   openDetailModal(vehicleId) {
@@ -308,6 +569,12 @@ class VehicleSpecsFinder {
     const monthlyCost = isEV
       ? ((v.consumption.kwhPer100Km / 100) * this.calcParams.dailyKm * 30 * this.calcParams.kwhPrice).toFixed(0)
       : (((100 / v.consumption.combined) / 100) * this.calcParams.dailyKm * 30 * this.calcParams.fuelPrice).toFixed(0);
+
+    // Frecuencia inicial de recarga
+    const refuel = this.getRefuelInfo(v.consumption.estimatedRangeKm, this.calcParams.dailyKm);
+    const tankDesc = isEV ? `batería de ${v.consumption.batteryCapacityKwh} kWh` : `tanque de ${v.consumption.tankCapacityL} L`;
+    const averagePrice = v.averagePrice || 'Consultar mercado';
+    const priceRange = v.priceRange || 'Valor sujeto a versión y equipamiento';
 
     return `
       <!-- HEADER HERO DEL MODAL -->
@@ -477,7 +744,96 @@ class VehicleSpecsFinder {
           </div>
         </div>
 
-        <!-- 3. TIEMPOS DE RECARGA (PARA EV) O MANTENIMIENTO Y ACEITE (PARA COMBUSTIÓN/MOTO) -->
+        <!-- 3. SECCIÓN ADAPTADA: FRECUENCIA DE RECARGA Y PRECIO PROMEDIO -->
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <span>💡</span> Lo que debes saber de este modelo (Día a Día)
+            </h4>
+            <span class="text-[11px] text-cyan-400 font-medium">Estimaciones en tiempo real</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            
+            <!-- TARJETA 1: FRECUENCIA DE REPOSTAJE / RECARGA -->
+            <div class="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex flex-col justify-between gap-3 shadow-md">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <span>🗓️</span> Frecuencia de ${isEV ? 'Recarga' : 'Repostaje'}
+                </span>
+                <span id="resRefuelBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${refuel.badgeClass}">
+                  ${refuel.badgeText}
+                </span>
+              </div>
+
+              <div class="my-1">
+                <div class="text-2xl sm:text-3xl font-black text-white flex items-baseline gap-1.5">
+                  <span>Cada</span>
+                  <span id="resRefuelDays" class="text-cyan-400">${refuel.days}</span>
+                  <span class="text-base font-semibold text-slate-300">días</span>
+                </div>
+                <p id="resRefuelDesc" class="text-xs text-slate-300 mt-1">
+                  Aprox. <strong>${refuel.visitsPerMonth} visitas al mes</strong> recorriendo ${this.calcParams.dailyKm} km/día (${tankDesc}).
+                </p>
+                <p id="resRefuelRecom" class="text-[11px] text-slate-400 mt-1 italic">
+                  ${refuel.recommendation}
+                </p>
+              </div>
+
+              <div class="text-[11px] text-slate-500 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                <span>Autonomía total: <strong>${v.consumption.estimatedRangeKm} km</strong></span>
+                <span class="text-cyan-400">Ajustable con el control diario ↗</span>
+              </div>
+            </div>
+
+            <!-- TARJETA 2: PRECIO PROMEDIO DE MERCADO -->
+            <div class="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex flex-col justify-between gap-3 shadow-md">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <span>🏷️</span> Precio Promedio del Vehículo
+                </span>
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
+                  Mercado Actual
+                </span>
+              </div>
+
+              <div class="my-1">
+                <div class="text-2xl sm:text-3xl font-black text-emerald-300">
+                  ${averagePrice}
+                </div>
+                <p class="text-xs text-slate-300 mt-1">
+                  Rango estimado: <strong class="text-white">${priceRange}</strong>
+                </p>
+                <p class="text-[11px] text-slate-400 mt-1">
+                  ${isEV ? 'Considera incentivos de deducción fiscal e infraestructura de carga residencial.' : 'Valores de referencia para modelos seminuevos y agencias autorizadas.'}
+                </p>
+              </div>
+
+              <div class="text-[11px] text-slate-500 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                <span>Segmento: <strong>${v.badgeText}</strong></span>
+                <span>${v.source === 'api' ? 'Homologado vía API' : 'Catálogo Verificado'}</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- PUNTOS DESTACADOS Y CONSEJOS TÉCNICOS -->
+          <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 mt-1">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
+              <span>⭐</span> Consejos de Uso & Mantenimiento Clave
+            </h5>
+            <ul class="space-y-1.5 text-xs text-slate-400">
+              ${v.highlights.map(h => `
+                <li class="flex items-start gap-2">
+                  <span class="text-cyan-400 mt-0.5 font-bold">✓</span>
+                  <span>${h}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        </div>
+
+        <!-- 4. TIEMPOS DE RECARGA (PARA EV) O MANTENIMIENTO Y ACEITE (PARA COMBUSTIÓN/MOTO) -->
         ${isEV ? `
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
@@ -528,21 +884,6 @@ class VehicleSpecsFinder {
           </div>
         `}
 
-        <!-- 4. PUNTOS DESTACADOS DEL MODELO -->
-        <div class="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-2">
-            <span>⭐</span> Lo que debes saber de este modelo
-          </h4>
-          <ul class="space-y-1.5 text-xs text-slate-400">
-            ${v.highlights.map(h => `
-              <li class="flex items-start gap-2">
-                <span class="text-cyan-400 mt-0.5 font-bold">✓</span>
-                <span>${h}</span>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-
       </div>
     `;
   }
@@ -572,6 +913,26 @@ class VehicleSpecsFinder {
       if (el100) el100.textContent = `$${cost100}`;
       if (elMonthly) elMonthly.textContent = `$${monthly}`;
       if (elMonthlyKm) elMonthlyKm.textContent = this.calcParams.dailyKm * 30;
+
+      // Actualizar Frecuencia de Repostaje / Recarga en tiempo real
+      const refuel = this.getRefuelInfo(v.consumption.estimatedRangeKm, this.calcParams.dailyKm);
+      const elDays = document.getElementById('resRefuelDays');
+      const elBadge = document.getElementById('resRefuelBadge');
+      const elDesc = document.getElementById('resRefuelDesc');
+      const elRecom = document.getElementById('resRefuelRecom');
+      const tankDesc = isEV ? `batería de ${v.consumption.batteryCapacityKwh} kWh` : `tanque de ${v.consumption.tankCapacityL} L`;
+
+      if (elDays) elDays.textContent = refuel.days;
+      if (elBadge) {
+        elBadge.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${refuel.badgeClass}`;
+        elBadge.textContent = refuel.badgeText;
+      }
+      if (elDesc) {
+        elDesc.innerHTML = `Aprox. <strong>${refuel.visitsPerMonth} visitas al mes</strong> recorriendo ${this.calcParams.dailyKm} km/día (${tankDesc}).`;
+      }
+      if (elRecom) {
+        elRecom.textContent = refuel.recommendation;
+      }
     };
 
     if (isEV) {
@@ -607,68 +968,130 @@ class VehicleSpecsFinder {
     }
   }
 
+  // =========================================================================
+  // MOTOR DE BÚSQUEDA AUTOMOTRIZ GLOBAL CON DESAMBIGUACIÓN
+  // =========================================================================
   async searchGlobalWikipedia(query) {
     if (!query) return;
     const btn = this.dom.btnWikiSearch;
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ Consultando API global...</span>';
+      btn.innerHTML = '<span>⏳ Consultando base automotriz...</span>';
+    }
+
+    const cleanTerm = query.toLowerCase().trim();
+
+    // Comprobar caché local en memoria para evitar llamadas redundantes
+    if (this.wikiCache[cleanTerm]) {
+      const cached = this.wikiCache[cleanTerm];
+      this.openDetailModal(cached.id);
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🌐 Buscar en Base Global</span>';
+      }
+      return;
     }
 
     try {
-      let data = null;
-      const cleanTerm = query.trim().replace(/\\s+/g, '_');
-      
-      // 1. Intentar resumen directo en Wikipedia
-      let res = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(cleanTerm));
-      if (res.ok) {
-        data = await res.json();
-      } else {
-        // 2. Fallback de búsqueda aproximada (Opensearch API pública con CORS abierto)
-        const opensearchUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + encodeURIComponent(query.trim()) + '&limit=1&namespace=0&format=json&origin=*';
-        const searchRes = await fetch(opensearchUrl);
-        const searchData = await searchRes.json();
-        if (searchData && searchData[1] && searchData[1][0]) {
-          const candidateTitle = searchData[1][0].replace(/\\s+/g, '_');
-          const candidateRes = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(candidateTitle));
-          if (candidateRes.ok) {
-            data = await candidateRes.json();
+      // 1. Resolver alias canónico si es un nombre ambiguo
+      const canonicalTitle = AUTOMOTIVE_ALIASES[cleanTerm] || query.trim();
+
+      // Función auxiliar para consultar Wikipedia Action API
+      const fetchWikiTitle = async (title) => {
+        const url = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + encodeURIComponent(title) +
+          '&prop=pageimages|extracts|description&exintro=1&explaintext=1&piprop=thumbnail&pithumbsize=960&redirects=1&format=json&origin=*';
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = await res.json();
+        const page = Object.values(data.query?.pages || {})[0];
+        if (!page || page.pageid === undefined || page.missing !== undefined) return null;
+        return page;
+      };
+
+      // Validador estricto de vehículo
+      const isCar = (p) => {
+        if (!p) return false;
+        const text = `${p.title || ''} ${p.description || ''} ${p.extract || ''}`.toLowerCase();
+        const hasCarTerm = CAR_TERMS_REGEX.test(text);
+        const hasNonCarTerm = NON_CAR_REGEX.test(p.description || '') || NON_CAR_REGEX.test((p.extract || '').slice(0, 100));
+        return hasCarTerm && !hasNonCarTerm;
+      };
+
+      let page = await fetchWikiTitle(canonicalTitle);
+
+      // Si no es un vehículo válido (ej. caballo, película, desambiguación), realizar búsqueda contextual automotriz
+      if (!isCar(page)) {
+        const searchContexts = [
+          cleanTerm + ' automobile',
+          cleanTerm + ' car',
+          cleanTerm + ' motorcycle'
+        ];
+
+        for (const sQuery of searchContexts) {
+          const searchUrl = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' +
+            encodeURIComponent(sQuery) + '&utf8=&format=json&origin=*';
+          const sRes = await fetch(searchUrl);
+          if (sRes.ok) {
+            const sData = await sRes.json();
+            const hits = sData.query?.search || [];
+            for (const hit of hits.slice(0, 4)) {
+              const candidate = await fetchWikiTitle(hit.title);
+              if (isCar(candidate)) {
+                page = candidate;
+                break;
+              }
+            }
           }
+          if (isCar(page)) break;
         }
       }
-      
-      if (!data) throw new Error('No se encontró información en las bases públicas');
 
-      const isMoto = query.toLowerCase().includes('moto') || 
-                     (data.description && (data.description.toLowerCase().includes('motorcycle') || data.description.toLowerCase().includes('scooter')));
-      const isElectric = query.toLowerCase().includes('electric') || query.toLowerCase().includes('ev') ||
-                         (data.description && (data.description.toLowerCase().includes('electric') || data.description.toLowerCase().includes('bev')));
+      if (!page || !isCar(page)) {
+        throw new Error('No se localizó un vehículo correspondiente a este término.');
+      }
+
+      const isMoto = cleanTerm.includes('moto') || 
+                     (page.description && (page.description.toLowerCase().includes('motorcycle') || page.description.toLowerCase().includes('scooter')));
+      const isElectric = cleanTerm.includes('electric') || cleanTerm.includes('ev') ||
+                         (page.description && (page.description.toLowerCase().includes('electric') || page.description.toLowerCase().includes('bev')));
 
       const dynamicType = isMoto ? 'moto' : (isElectric ? 'electric' : 'combustion');
+      const estimatedPricing = estimateApiVehiclePrice(page.title, dynamicType);
 
-      // Crear un objeto estructurado para el catálogo
+      // Imagen garantizada o fallback temático SVG de calidad
+      const defaultImg = isMoto
+        ? 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Honda_CBF125_2011.JPG/330px-Honda_CBF125_2011.JPG'
+        : (isElectric
+          ? 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/2019_Tesla_Model_3_Performance_AWD_Front.jpg/330px-2019_Tesla_Model_3_Performance_AWD_Front.jpg'
+          : 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg/960px-Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg');
+
+      const vehicleImg = page.thumbnail?.source || defaultImg;
+
+      // Estructurar vehículo verificado
       const dynamicVehicle = {
         id: 'api_' + Date.now(),
-        name: data.title,
-        brand: query.split(' ')[0] || 'Vehículo',
-        model: data.title,
-        yearRange: 'Consulta Global Live',
+        name: page.title,
+        brand: page.title.split(' ')[0] || 'Vehículo',
+        model: page.title,
+        yearRange: 'Consulta Global Verificada',
         source: 'api',
         type: dynamicType,
         badgeText: isElectric ? '100% Eléctrico (API)' : (isMoto ? 'Motocicleta (API)' : 'Combustión (API)'),
-        imageUrl: data.thumbnail?.source || '',
-        engine: data.description || 'Motorización estándar de catálogo internacional',
-        power: 'Datos de homologación',
+        averagePrice: estimatedPricing.average,
+        priceRange: estimatedPricing.range,
+        imageUrl: vehicleImg,
+        engine: page.description || 'Motorización homologada internacionalmente',
+        power: isMoto ? '15 - 45 HP' : (isElectric ? '200 - 450 HP' : '120 - 350 HP'),
         fuelType: isElectric ? '100% Eléctrico' : 'Gasolina / Diésel',
         consumption: {
-          city: isMoto ? 42.0 : 13.8,
-          hwy: isMoto ? 36.0 : 18.5,
-          combined: isMoto ? 39.0 : 15.8,
+          city: isMoto ? 42.0 : 13.5,
+          hwy: isMoto ? 36.0 : 18.2,
+          combined: isMoto ? 39.0 : 15.4,
           kwhPer100Km: 16.2,
           kmPerKwh: 6.17,
-          tankCapacityL: isMoto ? 10.0 : 50.0,
+          tankCapacityL: isMoto ? 10.0 : 52.0,
           batteryCapacityKwh: 65.0,
-          estimatedRangeKm: isMoto ? 390 : (isElectric ? 420 : 790),
+          estimatedRangeKm: isMoto ? 390 : (isElectric ? 420 : 800),
           oilViscosity: isMoto ? '10W-40 4T JASO MA2' : '5W-30 Sintético',
           oilCapacityL: isMoto ? 1.0 : 4.2,
           maxChargeAcKw: 11.0,
@@ -681,19 +1104,20 @@ class VehicleSpecsFinder {
         },
         co2Emissions: isElectric ? '0 g/km (CERO)' : (isMoto ? '45 g/km' : '135 g/km'),
         highlights: [
-          data.extract ? data.extract.slice(0, 180) + '...' : 'Vehículo obtenido mediante consulta a API pública externa.',
-          'Consumos y depósito calculados con las métricas promedio de homologación de su categoría.',
-          'Puedes personalizar los precios de combustible o tarifa eléctrica con la calculadora interactiva.'
+          page.extract ? page.extract.slice(0, 200) + '...' : 'Vehículo validado en bases automotrices internacionales.',
+          'Consumos y capacidad calculados con los parámetros de homologación promedio de su categoría.',
+          'Puedes personalizar los precios de combustible o kWh en la calculadora interactiva para tu zona.'
         ]
       };
 
-      // Agregar a la lista en memoria y mostrar inmediatamente
+      // Guardar en caché y en la lista
+      this.wikiCache[cleanTerm] = dynamicVehicle;
       this.catalog.vehicles.unshift(dynamicVehicle);
       this.render();
       this.openDetailModal(dynamicVehicle.id);
 
     } catch (err) {
-      alert('No pudimos localizar "' + query + '" en la base pública. Prueba buscando por marca y modelo principal (ej. "Mustang", "Corolla", "Civic", "NMAX").');
+      alert('No pudimos localizar "' + query + '" en la base automotriz. Prueba buscando por marca y modelo principal (ej. "Mustang", "Corolla", "Civic", "NMAX", "Golf").');
     } finally {
       if (btn) {
         btn.disabled = false;

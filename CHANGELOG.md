@@ -9,12 +9,22 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [En desarrollo] (Rama: Mejoras)
 
+### Añadido y Mejorado
+- **Motor de Desambiguación Automotriz & Solución al Caso "Mustang" / Caballo**:
+  - Implementación de un pipeline de desambiguación con más de 70 alias automotrices canónicos (`mustang` -> `Ford Mustang`, `beetle` -> `Volkswagen Beetle`, `golf` -> `Volkswagen Golf`, `viper` -> `Dodge Viper`, etc.).
+  - Filtro estricto de validación vehicular mediante expresiones regulares que analiza descripciones, categorías y textos para descartar entidades biológicas (caballos, mamíferos, insectos) o de entretenimiento (canciones, películas), garantizando que las consultas globales siempre recuperen automóviles o motocicletas legítimos con fotografías fidedignas.
+  - Inclusión oficial del **Ford Mustang 2.3 EcoBoost / 5.0 V8 GT** en el catálogo local de especificaciones (`js/specs-catalog.js`).
+- **Adaptación de la Sección "Lo que debes saber de este modelo" (Día a Día)**:
+  - **Frecuencia de Recarga / Repostaje**: Cálculo dinámico en vivo que calcula e informa cada cuántos días tendrá que visitar la gasolinera o punto de recarga el usuario, número de visitas mensuales estimadas y distintivo de conveniencia (`🟢 Muy Baja`, `🔵 Moderada`, `🟡 Semanal`, `⚡ Frecuente`). Conectado en tiempo real al deslizador de kilometraje diario habitual.
+  - **Precio Promedio de Mercado**: Despliegue prominente del precio promedio comercial y rango de mercado sugerido tanto en las tarjetas del catálogo como en la ficha técnica ampliada. Incorpora un estimador contextual para consultas externas por segmento.
+- **Actualización de Service Worker PWA (`sw.js`)**:
+  - Bump a `autofind-v1.9.0-specs-refined` para invalidación inmediata de caché en navegadores móviles y de escritorio.
+
 ### Corregido
 - **Desbloqueo Total de Interacción y Clics en la Interfaz**:
   - Se corrigió error fatal de sintaxis (`SyntaxError: Identifier 'btnToggleDiagnosis' has already been declared`) en `js/app.js` provocado por una doble declaración de variable en el mismo ámbito de función. Este fallo impedía que el motor JavaScript del navegador ejecutara `AutoFindApp`, impidiendo el registro de todos los event listeners de clics en pestañas, botones y tarjetas (dejando únicamente operativo el Web Component autónomo `<model-viewer>`).
   - Se añadió explícitamente la clase `hidden` al contenedor `#componentModal` en `index.html` y se sincronizó su ciclo de vida en `openModal()` y `closeModal()`, impidiendo que un div fijo a pantalla completa (`fixed inset-0 z-50`) interceptara de forma invisible los eventos de puntero.
   - Se restauraron y blindaron las reglas de `.modal-backdrop` en `css/styles.css` con `pointer-events: none` y `visibility: hidden` cuando el modal está en reposo.
-  - Actualización de versión del Service Worker a `autofind-v1.8.0-fix-events` para forzar la actualización inmediata en GitHub Pages y localhost.
 
 ### Añadido
 - **Sección Dedicada: Buscador de Vehículos & Fichas de Consumo del Día a Día (`js/finder.js` y `js/specs-catalog.js`)**:

@@ -1,9 +1,9 @@
 // AutoFind Lab - Catálogo Local de Especificaciones y Consumo del Día a Día
-// Proporciona datos de consumo homologado, capacidades de tanque/batería y tiempos de carga offline.
+// Proporciona datos de consumo homologado, capacidades de tanque/batería, precios promedio y tiempos de carga offline.
 
 const VEHICLES_SPECS_CATALOG = [
   // =========================================================================
-  // 1. VEHÍCULOS DE COMBUSTIÓN (GASOLINA / GAS / HÍBRIDOS)
+  // 1. VEHÍCULOS DE COMBUSTIÓN (GASOLINA / GAS / HÍBRIDOS / MUSCLE)
   // =========================================================================
   {
     id: 'toyota_corolla',
@@ -13,6 +13,8 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2020 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina / Híbrido',
+    averagePrice: '$419,900 MXN',
+    priceRange: '$385,000 - $520,000 MXN (~$22,800 USD)',
     imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Toyota_Corolla_Hybrid_%28E210%29_IMG_4338.jpg/330px-Toyota_Corolla_Hybrid_%28E210%29_IMG_4338.jpg',
     engine: '2.0L 4 Cilindros Dual VVT-i (168 HP) / 1.8L Híbrido e-CVT',
     power: '140 - 168 HP',
@@ -34,6 +36,36 @@ const VEHICLES_SPECS_CATALOG = [
     ]
   },
   {
+    id: 'ford_mustang',
+    name: 'Ford Mustang 2.3 EcoBoost / 5.0 V8 GT',
+    brand: 'Ford',
+    model: 'Mustang',
+    yearRange: '2018 - 2025',
+    type: 'combustion',
+    badgeText: 'Gasolina / V8 Muscle',
+    averagePrice: '$1,050,000 MXN',
+    priceRange: '$890,000 - $1,190,000 MXN (~$57,000 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg/960px-Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg',
+    engine: '2.3L EcoBoost Turbo (315 HP) o 5.0L Coyote V8 (486 HP)',
+    power: '315 - 486 HP',
+    fuelType: 'Gasolina Premium (91+ Octanos)',
+    consumption: {
+      city: 7.8,
+      hwy: 13.5,
+      combined: 9.8,
+      tankCapacityL: 61.0,
+      estimatedRangeKm: 598,
+      oilViscosity: '5W-50 Synthetic (V8) / 5W-30 (EcoBoost)',
+      oilCapacityL: 9.5
+    },
+    co2Emissions: '270 g/km (Muscle Car V8)',
+    highlights: [
+      'Ícono deportivo americano con sonido y potencia inconfundible del motor Coyote V8.',
+      'Depósito de 61 Litros con autonomía carretera de hasta 820 km en crucero.',
+      'Frenos Brembo de 6 pistones y modos de conducción Track / Drag / Sport.'
+    ]
+  },
+  {
     id: 'nissan_versa',
     name: 'Nissan Versa 1.6L',
     brand: 'Nissan',
@@ -41,6 +73,8 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2019 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina',
+    averagePrice: '$334,900 MXN',
+    priceRange: '$295,000 - $379,000 MXN (~$18,200 USD)',
     imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/2011_Nissan_Versa_1.6_Sedan.jpg/330px-2011_Nissan_Versa_1.6_Sedan.jpg',
     engine: '1.6L 4 Cilindros DOHC HR16DE (118 HP)',
     power: '118 HP @ 6.000 RPM',
@@ -69,6 +103,8 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2020 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina / Diésel / eTSI',
+    averagePrice: '$465,000 MXN',
+    priceRange: '$420,000 - $560,000 MXN (~$25,200 USD)',
     imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/2020_Volkswagen_Golf_Style_1.5_Front.jpg/330px-2020_Volkswagen_Golf_Style_1.5_Front.jpg',
     engine: '1.5L TSI EVO Turbo (130 / 150 HP) microhíbrido 48V',
     power: '130 - 150 HP',
@@ -97,6 +133,8 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2019 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina Turbo',
+    averagePrice: '$399,900 MXN',
+    priceRange: '$365,000 - $475,000 MXN (~$21,700 USD)',
     imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/2019_Volkswagen_Jetta_1.4T_R-Line_in_Haba%C3%B1ero_Orange_Metallic%2C_front_right.jpg/330px-2019_Volkswagen_Jetta_1.4T_R-Line_in_Haba%C3%B1ero_Orange_Metallic%2C_front_right.jpg',
     engine: '1.4L TSI Turbo Intercooler 16V (150 HP)',
     power: '150 HP @ 5.000 RPM (250 Nm torque)',
@@ -125,6 +163,8 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2018 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina',
+    averagePrice: '$285,000 MXN',
+    priceRange: '$255,000 - $315,000 MXN (~$15,500 USD)',
     imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/2012_Chevrolet_Aveo_LTZ_1.4_Front.jpg/330px-2012_Chevrolet_Aveo_LTZ_1.4_Front.jpg',
     engine: '1.5L 4 Cilindros DOHC 16V (98 HP)',
     power: '98 HP @ 5.800 RPM',
@@ -150,27 +190,29 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'SEAT Ibiza 1.0 TSI / MPI',
     brand: 'SEAT',
     model: 'Ibiza',
-    yearRange: '2018 - 2025',
+    yearRange: '2019 - 2025',
     type: 'combustion',
-    badgeText: 'Gasolina / GNC Gas',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/2018_SEAT_Ibiza_SE_Technology_MPi_1.0_Front.jpg/330px-2018_SEAT_Ibiza_SE_Technology_MPi_1.0_Front.jpg',
-    engine: '1.0L TSI 3 Cilindros Turbo (110 HP) / TGI Gas Natural',
-    power: '80 - 110 HP',
-    fuelType: 'Gasolina 95 / GNC (Gas Natural Vehicular)',
+    badgeText: 'Gasolina Turbo',
+    averagePrice: '$345,900 MXN',
+    priceRange: '$310,000 - $385,000 MXN (~$18,800 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/2018_SEAT_Ibiza_SE_Technology_1.0_Front.jpg/330px-2018_SEAT_Ibiza_SE_Technology_1.0_Front.jpg',
+    engine: '1.0L 3 Cilindros TSI Turbo (110 HP / 115 HP)',
+    power: '110 - 115 HP',
+    fuelType: 'Gasolina 95 Octanos',
     consumption: {
       city: 15.6,
       hwy: 21.3,
       combined: 18.2,
       tankCapacityL: 40.0,
       estimatedRangeKm: 728,
-      oilViscosity: '0W-20 / 5W-30 Full Synthetic',
+      oilViscosity: '0W-20 / 5W-30 (Norma VW 504.00 / 508.00)',
       oilCapacityL: 4.0
     },
-    co2Emissions: '118 g/km (Etiqueta ECO en versión GNC)',
+    co2Emissions: '118 g/km (Etiqueta C)',
     highlights: [
-      'Comportamiento urbano ágil y gran facilidad de aparcamiento.',
-      'Consumo mínimo que supera los 21 km/L en carretera.',
-      'Disponible en variantes TGI que reducen el gasto por km en más de un 40%.'
+      'Excelente agilidad en ciudad y curvas gracias a la plataforma MQB-A0.',
+      'Consumo extraordinario en carretera con más de 21 km por litro.',
+      'Diseño juvenil y moderno con conectividad Full Link.'
     ]
   },
   {
@@ -180,25 +222,27 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Duster',
     yearRange: '2020 - 2025',
     type: 'combustion',
-    badgeText: 'Gasolina / GLP Gas',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Dacia_Duster_TCe_130_Extreme_%28III%29_%E2%80%93_f_13102024.jpg/330px-Dacia_Duster_TCe_130_Extreme_%28III%29_%E2%80%93_f_13102024.jpg',
+    badgeText: 'Gasolina SUV',
+    averagePrice: '$369,900 MXN',
+    priceRange: '$335,000 - $425,000 MXN (~$20,100 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/2018_Dacia_Duster_Comfort_1.6_Front.jpg/330px-2018_Dacia_Duster_Comfort_1.6_Front.jpg',
     engine: '1.3L Turbo TCe (154 HP) desarrollado con Mercedes-Benz',
-    power: '154 HP (250 Nm)',
-    fuelType: 'Gasolina Regular / Adaptable a GLP',
+    power: '154 HP @ 5.250 RPM',
+    fuelType: 'Gasolina Regular o Premium',
     consumption: {
-      city: 12.2,
-      hwy: 16.8,
-      combined: 14.1,
+      city: 12.8,
+      hwy: 17.5,
+      combined: 14.7,
       tankCapacityL: 50.0,
-      estimatedRangeKm: 705,
-      oilViscosity: '5W-30 / 5W-40 RN0700 / RN0710',
+      estimatedRangeKm: 735,
+      oilViscosity: '5W-40 / 5W-30 (Norma Renault RN0710 / RN17)',
       oilCapacityL: 4.8
     },
-    co2Emissions: '156 g/km (Etiqueta C / ECO con GLP)',
+    co2Emissions: '154 g/km (Etiqueta C)',
     highlights: [
-      'SUV todocamino robusto con excelente altura al suelo de 21 cm.',
-      'Motor turbo moderno con gran par motor para adelantar con carga.',
-      'Suspensión reforzada ideal para baches y caminos no asfaltados.'
+      'Altura libre al suelo de 21 cm para superar baches y caminos irregulares.',
+      'Motor 1.3 Turbo potente con 250 Nm de torque inmediato.',
+      'Suspensión robusta de largo recorrido muy resistente.'
     ]
   },
   {
@@ -206,55 +250,59 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Honda Civic 2.0 e:HEV / 1.5 Turbo',
     brand: 'Honda',
     model: 'Civic',
-    yearRange: '2021 - 2025',
+    yearRange: '2022 - 2025',
     type: 'combustion',
-    badgeText: 'Híbrido e:HEV / Gasolina',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg/330px-Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg',
-    engine: '2.0L e:HEV Ciclo Atkinson con 2 Motores Eléctricos (184 HP)',
-    power: '184 HP combinados',
-    fuelType: 'Gasolina Regular / Híbrido Autorrecargable',
+    badgeText: 'Gasolina Turbo / Híbrido',
+    averagePrice: '$545,900 MXN',
+    priceRange: '$510,000 - $610,000 MXN (~$29,600 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/2022_Honda_Civic_EX_%2811th_generation%29%2C_front_left.jpg/330px-2022_Honda_Civic_EX_%2811th_generation%29%2C_front_left.jpg',
+    engine: '1.5L VTEC Turbo (176 HP) / 2.0L Híbrido e:HEV (181 HP)',
+    power: '176 - 181 HP',
+    fuelType: 'Gasolina Regular o Premium',
     consumption: {
-      city: 20.8,
-      hwy: 19.2,
-      combined: 20.0,
-      tankCapacityL: 40.0,
-      estimatedRangeKm: 800,
-      oilViscosity: '0W-20 Original Honda Genuine Oil',
+      city: 15.1,
+      hwy: 20.6,
+      combined: 17.4,
+      tankCapacityL: 47.0,
+      estimatedRangeKm: 817,
+      oilViscosity: '0W-20 Honda Genuine / API SP Full Synthetic',
       oilCapacityL: 3.7
     },
-    co2Emissions: '108 g/km (Etiqueta ECO)',
+    co2Emissions: '108 - 132 g/km (Etiqueta ECO / C)',
     highlights: [
-      'En ciudad rueda más del 70% del tiempo en modo eléctrico silencioso.',
-      'Impresionante rendimiento de 20 km/L en entornos urbanos densos.',
-      'Excelente valor de reventa y calidad de ensamblaje japonés.'
+      'Interior de alta gama con sistema de rejilla panal de abeja.',
+      'Excelente retención de valor en el mercado de reventa.',
+      'Paquete completo de seguridad activa Honda Sensing de serie.'
     ]
   },
   {
     id: 'mazda_3',
     name: 'Mazda 3 2.5L / e-Skyactiv G',
     brand: 'Mazda',
-    model: 'Mazda 3',
-    yearRange: '2019 - 2025',
+    model: '3',
+    yearRange: '2020 - 2025',
     type: 'combustion',
-    badgeText: 'Gasolina / Mild Hybrid',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Mazda3_SKYACTIV-G.jpg/330px-Mazda3_SKYACTIV-G.jpg',
-    engine: '2.5L Skyactiv-G 4 Cilindros (186 HP) con microhibridación',
-    power: '186 HP @ 6.000 RPM',
-    fuelType: 'Gasolina Regular 87 Octanos',
+    badgeText: 'Gasolina / M-Hybrid',
+    averagePrice: '$392,900 MXN',
+    priceRange: '$360,000 - $480,000 MXN (~$21,300 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2019_Mazda3_SE-L_2.0_Front.jpg/330px-2019_Mazda3_SE-L_2.0_Front.jpg',
+    engine: '2.5L Skyactiv-G 4 Cilindros (186 HP) o Turbo AWD (227 HP)',
+    power: '186 - 227 HP',
+    fuelType: 'Gasolina Regular (87) o Premium',
     consumption: {
-      city: 12.8,
-      hwy: 18.1,
-      combined: 14.9,
+      city: 12.9,
+      hwy: 18.2,
+      combined: 15.0,
       tankCapacityL: 51.0,
-      estimatedRangeKm: 760,
-      oilViscosity: '0W-20 Skyactiv Technology',
+      estimatedRangeKm: 765,
+      oilViscosity: '0W-20 Mazda Supra Full Synthetic',
       oilCapacityL: 4.5
     },
-    co2Emissions: '145 g/km (Etiqueta ECO en versiones MHEV)',
+    co2Emissions: '148 g/km (Etiqueta C)',
     highlights: [
-      'Acabados interiores prémium comparables con marcas de lujo alemanas.',
-      'Motor atmosférico de respuesta lineal inmediata sin retardo de turbo.',
-      'Afinación de chasis "Jinba Ittai" que conecta al conductor con el vehículo.'
+      'Acabados interiores que compiten con marcas premium de lujo.',
+      'Respuesta de aceleración lineal sin retardo turbo gracias a sus 2.5 L.',
+      'Excelente insonorización y tacto de dirección preciso Jinba Ittai.'
     ]
   },
   {
@@ -264,25 +312,27 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Ranger',
     yearRange: '2020 - 2025',
     type: 'combustion',
-    badgeText: 'Diésel / Gasolina Turbo',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Ford_Ranger_%28T6%2C_P703%29_Wildtrak_IMG_7320.jpg/330px-Ford_Ranger_%28T6%2C_P703%29_Wildtrak_IMG_7320.jpg',
-    engine: '2.0L Bi-Turbo Diésel EcoBlue (210 HP) / 2.3L EcoBoost Gasolina',
-    power: '170 - 270 HP',
-    fuelType: 'Diésel con AdBlue / Gasolina Regular',
+    badgeText: 'Diésel / Gasolina Pickup',
+    averagePrice: '$785,000 MXN',
+    priceRange: '$690,000 - $980,000 MXN (~$42,500 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/2019_Ford_Ranger_Wildtrak_4X4_2.0_Front.jpg/330px-2019_Ford_Ranger_Wildtrak_4X4_2.0_Front.jpg',
+    engine: '2.0L Bi-Turbo Diésel Panther (210 HP) / 2.3 EcoBoost (270 HP)',
+    power: '210 - 270 HP',
+    fuelType: 'Diésel Ultra Bajo Azufre / Gasolina',
     consumption: {
       city: 9.8,
-      hwy: 13.5,
-      combined: 11.2,
+      hwy: 14.2,
+      combined: 11.9,
       tankCapacityL: 80.0,
-      estimatedRangeKm: 896,
-      oilViscosity: '0W-30 / 5W-30 Motorcraft WSS-M2C950-A',
+      estimatedRangeKm: 952,
+      oilViscosity: '0W-30 / 5W-30 Ford WSS-M2C950-A',
       oilCapacityL: 7.2
     },
-    co2Emissions: '198 g/km (Etiqueta C)',
+    co2Emissions: '205 g/km (Etiqueta C)',
     highlights: [
-      'Capacidad de carga superior a 1 tonelada y remolque de hasta 3.500 kg.',
-      'Gran depósito de 80 L que permite travesías de larga distancia sin repostar.',
-      'Tracción 4x4 conectable con reductora y bloqueo de diferencial trasero.'
+      'Depósito enorme de 80 Litros ideal para travesías y trabajo pesado.',
+      'Capacidad de remolque de hasta 3.500 kg con control de balanceo.',
+      'Tracción 4x4 con reductora y bloqueo de diferencial trasero.'
     ]
   },
   {
@@ -293,29 +343,31 @@ const VEHICLES_SPECS_CATALOG = [
     yearRange: '2020 - 2025',
     type: 'combustion',
     badgeText: 'Gasolina Turbo',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/2022_Chevrolet_Onix_RS_1.0_Turbo.jpg/330px-2022_Chevrolet_Onix_RS_1.0_Turbo.jpg',
-    engine: '1.0L Turbo 3 Cilindros DOHC (116 HP)',
-    power: '116 HP (175 Nm)',
+    averagePrice: '$318,000 MXN',
+    priceRange: '$285,000 - $355,000 MXN (~$17,300 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/2020_Chevrolet_Onix_Premier_Plus%2C_front_3.24.20.jpg/330px-2020_Chevrolet_Onix_Premier_Plus%2C_front_3.24.20.jpg',
+    engine: '1.0L Turbo 3 Cilindros Ecotec (114 HP)',
+    power: '114 HP @ 5.500 RPM',
     fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
-      city: 16.2,
-      hwy: 21.8,
-      combined: 18.5,
+      city: 15.8,
+      hwy: 21.5,
+      combined: 18.1,
       tankCapacityL: 44.0,
-      estimatedRangeKm: 814,
-      oilViscosity: '5W-30 dexos1 Gen 3',
+      estimatedRangeKm: 796,
+      oilViscosity: '0W-20 dexos1 Gen 3',
       oilCapacityL: 3.5
     },
-    co2Emissions: '118 g/km (Etiqueta C)',
+    co2Emissions: '120 g/km (Etiqueta C)',
     highlights: [
-      'Motor turbo de 3 cilindros con excelente relación peso-potencia.',
-      'Excelente consumo en carretera superando los 21 km/L reales.',
-      '6 bolsas de aire y conectividad Wi-Fi OnStar.'
+      'Excelente eficiencia de combustible superando los 21 km/L en autopista.',
+      'Equipamiento de seguridad completo con 6 bolsas de aire de serie.',
+      'Conectividad OnStar con punto de acceso Wi-Fi 4G LTE.'
     ]
   },
 
   // =========================================================================
-  // 2. VEHÍCULOS 100% ELÉCTRICOS (EV)
+  // 2. VEHÍCULOS 100% ELÉCTRICOS (EV / BEV)
   // =========================================================================
   {
     id: 'tesla_model_3',
@@ -324,29 +376,31 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Model 3',
     yearRange: '2021 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (BEV)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Tesla_Model_3_%282023%29_Autofr%C3%BChling_Ulm_IMG_9282.jpg/330px-Tesla_Model_3_%282023%29_Autofr%C3%BChling_Ulm_IMG_9282.jpg',
-    engine: 'Motor Eléctrico Trasero Síncrono de Imán Permanente (RWD) o Dual Motor AWD',
-    power: '283 HP (RWD) / 498 HP (Long Range)',
-    fuelType: '100% Eléctrico (Batería LFP 60 kWh o NCM 78 kWh)',
+    badgeText: '100% Eléctrico',
+    averagePrice: '$799,000 MXN',
+    priceRange: '$749,000 - $920,000 MXN (~$43,500 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/2019_Tesla_Model_3_Performance_AWD_Front.jpg/330px-2019_Tesla_Model_3_Performance_AWD_Front.jpg',
+    engine: 'Motor Trasero RWD o Dual Motor AWD sincrónico de imanes permanentes',
+    power: '283 - 498 HP',
+    fuelType: '100% Eléctrico (Batería LFP o NCM)',
     consumption: {
-      kwhPer100Km: 13.2,
-      kmPerKwh: 7.57,
+      kwhPer100Km: 14.0,
+      kmPerKwh: 7.14,
       batteryCapacityKwh: 60.0,
       estimatedRangeKm: 513,
       maxChargeAcKw: 11.0,
       maxChargeDcKw: 170.0,
       chargingTimes: {
-        schuko23: '16 h (20% a 80% a 2.3 kW)',
-        wallbox74: '4 h 50 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '20 min (10% a 80% en Supercharger 170 kW)'
+        schuko23: '26 h (enchufe común 2.3 kW)',
+        wallbox74: '8 h 15 min (Wallbox 7.4 kW)',
+        fastChargeDc: '25 min (Supercharger V3 / V4 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'El sedán eléctrico más aerodinámico y eficiente del mercado (Cd 0.219).',
-      'Acceso nativo a la red de Supercargadores con navegación predictiva de ruta.',
-      'Consumo récord en autovía por debajo de 14 kWh cada 100 km.'
+      'El sedán eléctrico más eficiente del mercado con solo 14 kWh/100km.',
+      'Acceso nativo a la red de Supercargadores de alta velocidad de Tesla.',
+      'Excelente aerodinámica (Cx 0.219) y tecnología de conducción asistida.'
     ]
   },
   {
@@ -356,29 +410,31 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Model Y',
     yearRange: '2021 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (SUV)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Tesla_Model_Y_Premium_%28Facelift%29_%E2%80%93_f_05052026.jpg/330px-Tesla_Model_Y_Premium_%28Facelift%29_%E2%80%93_f_05052026.jpg',
-    engine: 'Motor Eléctrico Trasero / Dual Motor Tracción Total (AWD)',
-    power: '299 HP (RWD) / 514 HP (Long Range)',
-    fuelType: '100% Eléctrico (Batería 60 kWh LFP / 78 kWh NCM)',
+    badgeText: '100% Eléctrico SUV',
+    averagePrice: '$869,000 MXN',
+    priceRange: '$829,000 - $1,050,000 MXN (~$47,200 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Tesla_Model_Y_front_right_view_%28cropped%29.jpg/330px-Tesla_Model_Y_front_right_view_%28cropped%29.jpg',
+    engine: 'Dual Motor AWD (Long Range) o RWD',
+    power: '299 - 456 HP',
+    fuelType: '100% Eléctrico',
     consumption: {
-      kwhPer100Km: 15.5,
-      kmPerKwh: 6.45,
+      kwhPer100Km: 16.5,
+      kmPerKwh: 6.06,
       batteryCapacityKwh: 75.0,
-      estimatedRangeKm: 455,
+      estimatedRangeKm: 533,
       maxChargeAcKw: 11.0,
       maxChargeDcKw: 250.0,
       chargingTimes: {
-        schuko23: '20 h (20% a 80% a 2.3 kW)',
-        wallbox74: '6 h 10 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '25 min (10% a 80% en Supercharger 250 kW)'
+        schuko23: '32 h (enchufe doméstico 2.3 kW)',
+        wallbox74: '10 h 30 min (Wallbox 7.4 kW)',
+        fastChargeDc: '27 min (Supercharger 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'El coche más vendido del mundo en 2023 gracias a su polivalencia y habitabilidad.',
-      'Maletero colosal de 854 L más maletero delantero (Frunk) de 117 L.',
-      'Bomba de calor octovalve de ultra alta eficiencia en invierno.'
+      'El SUV más vendido a nivel mundial con espacio inmenso y maletero delantero.',
+      'Potencia de recarga ultrarrápida de hasta 250 kW en corriente directa.',
+      'Bomba de calor de alta eficiencia que preserva la autonomía en invierno.'
     ]
   },
   {
@@ -386,31 +442,33 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'BYD Dolphin EV',
     brand: 'BYD',
     model: 'Dolphin',
-    yearRange: '2022 - 2025',
+    yearRange: '2023 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (Urbano)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/2021_BYD_Dolphin_EV_%28front%29.jpg/330px-2021_BYD_Dolphin_EV_%28front%29.jpg',
-    engine: 'Motor Síncrono de Imán Permanente Delantero (204 HP)',
-    power: '204 HP (310 Nm)',
-    fuelType: '100% Eléctrico (Batería Blade LFP 60.4 kWh)',
+    badgeText: '100% Eléctrico',
+    averagePrice: '$409,900 MXN',
+    priceRange: '$389,000 - $449,000 MXN (~$22,300 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/BYD_Dolphin_001.jpg/330px-BYD_Dolphin_001.jpg',
+    engine: 'Motor Eléctrico Delantero (95 HP / 204 HP)',
+    power: '95 - 204 HP',
+    fuelType: '100% Eléctrico (Batería Blade LFP)',
     consumption: {
-      kwhPer100Km: 15.9,
-      kmPerKwh: 6.28,
-      batteryCapacityKwh: 60.4,
-      estimatedRangeKm: 427,
-      maxChargeAcKw: 11.0,
-      maxChargeDcKw: 88.0,
+      kwhPer100Km: 13.5,
+      kmPerKwh: 7.40,
+      batteryCapacityKwh: 44.9,
+      estimatedRangeKm: 405,
+      maxChargeAcKw: 7.0,
+      maxChargeDcKw: 60.0,
       chargingTimes: {
-        schuko23: '17 h (20% a 80% a 2.3 kW)',
-        wallbox74: '5 h (20% a 80% a 7.4 kW)',
-        fastChargeDc: '29 min (30% a 80% en toma DC 88 kW)'
+        schuko23: '19 h (enchufe 2.3 kW)',
+        wallbox74: '6 h 30 min (Wallbox 7 kW)',
+        fastChargeDc: '38 min (DC 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Batería estructural Blade Battery (LFP) inmune a perforaciones térmicas.',
-      'Excelente relación costo/autonomía superando los 420 km WLTP.',
-      'Función de carga bidireccional V2L (Vehicle-to-Load) para alimentar electrodomésticos.'
+      'Equipa la célebre Batería Blade de fosfato de hierro y litio ultra-segura.',
+      'Consumo muy bajo en ciclo urbano gracias a su peso contenido y e-Platform 3.0.',
+      'Pantalla central giratoria de 12.8 pulgadas con asistente de voz en español.'
     ]
   },
   {
@@ -420,29 +478,31 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Seal',
     yearRange: '2023 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (Sedán Deportivo)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/2022_BYD_Seal.jpg/330px-2022_BYD_Seal.jpg',
-    engine: 'Tracción Trasera (313 HP) o Tracción Total AWD (530 HP)',
-    power: '313 - 530 HP',
-    fuelType: '100% Eléctrico (Batería Blade CTB 82.5 kWh)',
+    badgeText: '100% Eléctrico Deportivo',
+    averagePrice: '$778,800 MXN',
+    priceRange: '$750,000 - $888,000 MXN (~$42,300 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/BYD_Seal_001.jpg/330px-BYD_Seal_001.jpg',
+    engine: 'Single Motor RWD (313 HP) o Dual Motor AWD (530 HP)',
+    power: '313 - 530 HP (0-100 en 3.8s)',
+    fuelType: '100% Eléctrico (Blade Cell-to-Body)',
     consumption: {
-      kwhPer100Km: 16.6,
-      kmPerKwh: 6.02,
+      kwhPer100Km: 16.8,
+      kmPerKwh: 5.95,
       batteryCapacityKwh: 82.5,
       estimatedRangeKm: 570,
       maxChargeAcKw: 11.0,
       maxChargeDcKw: 150.0,
       chargingTimes: {
-        schuko23: '22 h (20% a 80% a 2.3 kW)',
-        wallbox74: '6 h 40 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '26 min (30% a 80% en cargador 150 kW)'
+        schuko23: '36 h (enchufe 2.3 kW)',
+        wallbox74: '11 h 30 min (Wallbox 7.4 kW)',
+        fastChargeDc: '26 min (DC 150 kW 30-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Tecnología Cell-to-Body (CTB) donde la batería forma parte del chasis estructural.',
-      'Aceleración de 0 a 100 km/h en 3.8 segundos en la versión Excellence AWD.',
-      'Autonomía de 570 km WLTP ideal para viajes por autopista.'
+      'Arquitectura Cell-to-Body (CTB) con una rigidez torsional de 40.500 Nm/grado.',
+      'Aceleración explosiva de 0 a 100 km/h en apenas 3.8 segundos.',
+      'Gran batería de 82.5 kWh que supera los 550 km en ciclo combinado.'
     ]
   },
   {
@@ -450,13 +510,15 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Nissan Leaf 40 / 62 kWh',
     brand: 'Nissan',
     model: 'Leaf',
-    yearRange: '2018 - 2025',
+    yearRange: '2018 - 2024',
     type: 'electric',
-    badgeText: '100% Eléctrico (Hatchback)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Nissan_Leaf_%28ZE2%29_autoMOBIL_T%C3%BCbingen_2025_DSC_2752.jpg/330px-Nissan_Leaf_%28ZE2%29_autoMOBIL_T%C3%BCbingen_2025_DSC_2752.jpg',
-    engine: 'Motor Eléctrico Delantero EM57 (150 HP / 217 HP en e+)',
+    badgeText: '100% Eléctrico',
+    averagePrice: '$695,000 MXN',
+    priceRange: '$630,000 - $780,000 MXN (~$37,800 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Nissan_Leaf_2018_Gen_2_Front.jpg/330px-Nissan_Leaf_2018_Gen_2_Front.jpg',
+    engine: 'Motor Síncrono de CA EM57 (150 HP / 217 HP e+)',
     power: '150 - 217 HP',
-    fuelType: '100% Eléctrico (Batería Iones de Litio 40 kWh / 62 kWh)',
+    fuelType: '100% Eléctrico',
     consumption: {
       kwhPer100Km: 17.1,
       kmPerKwh: 5.85,
@@ -465,16 +527,16 @@ const VEHICLES_SPECS_CATALOG = [
       maxChargeAcKw: 6.6,
       maxChargeDcKw: 50.0,
       chargingTimes: {
-        schuko23: '11 h (20% a 80% a 2.3 kW)',
-        wallbox74: '3 h 45 min (20% a 80% a 6.6 kW)',
-        fastChargeDc: '40 min (20% a 80% en toma CHAdeMO 50 kW)'
+        schuko23: '17 h (enchufe doméstico 2.3 kW)',
+        wallbox74: '6 h (Wallbox 6.6 kW)',
+        fastChargeDc: '45 min (conector CHAdeMO 50 kW)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Pionero mundial del coche eléctrico de gran volumen con mecánica superprobada.',
+      'Pionero mundial de los vehículos eléctricos con fiabilidad mecánica comprobada.',
       'Sistema e-Pedal para conducir y frenar utilizando un solo pedal.',
-      'Conector rápido CHAdeMO con soporte de energía bidireccional V2G (a la red).'
+      'Batería sin refrigeración activa ideal para climas templados y trayectos urbanos.'
     ]
   },
   {
@@ -482,45 +544,49 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Hyundai Ioniq 5',
     brand: 'Hyundai',
     model: 'Ioniq 5',
-    yearRange: '2021 - 2025',
+    yearRange: '2022 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (Arquitectura 800V)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Hyundai_Ioniq_5_AWD_Techniq-Paket_%E2%80%93_f_31122024.jpg/330px-Hyundai_Ioniq_5_AWD_Techniq-Paket_%E2%80%93_f_31122024.jpg',
-    engine: 'Motor Eléctrico Trasero (228 HP) o Tracción Total HTRAC (325 HP)',
+    badgeText: '100% Eléctrico 800V',
+    averagePrice: '$945,000 MXN',
+    priceRange: '$890,000 - $1,150,000 MXN (~$51,300 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Hyundai_Ioniq_5_Auto_Zuerich_2021_IMG_0546.jpg/330px-Hyundai_Ioniq_5_Auto_Zuerich_2021_IMG_0546.jpg',
+    engine: 'Arquitectura E-GMP 800V RWD o AWD (228 - 325 HP)',
     power: '228 - 325 HP',
-    fuelType: '100% Eléctrico (Batería 77.4 kWh)',
+    fuelType: '100% Eléctrico',
     consumption: {
-      kwhPer100Km: 17.0,
-      kmPerKwh: 5.88,
+      kwhPer100Km: 17.5,
+      kmPerKwh: 5.71,
       batteryCapacityKwh: 77.4,
       estimatedRangeKm: 507,
       maxChargeAcKw: 11.0,
       maxChargeDcKw: 240.0,
       chargingTimes: {
-        schuko23: '21 h (20% a 80% a 2.3 kW)',
-        wallbox74: '6 h 20 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '18 min (10% a 80% en cargador ultrarrápido 800V)'
+        schuko23: '33 h (enchufe 2.3 kW)',
+        wallbox74: '10 h 45 min (Wallbox 7.4 kW)',
+        fastChargeDc: '18 min (Carga ultrarrápida 800V 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Arquitectura eléctrica de 800V que carga del 10% al 80% en solo 18 minutos.',
-      'Diseño retrofuturista con luces paramétricas de píxeles y batalla de 3 metros.',
-      'Consola central móvil Universal Island con asientos de relax gravedad cero.'
+      'Arquitectura de 800 Voltios: pasa del 10% al 80% en tan solo 18 minutos.',
+      'Tecnología V2L (Vehicle-to-Load) que permite alimentar electrodomésticos externos.',
+      'Distancia entre ejes de 3.0 metros que ofrece un habitáculo excepcionalmente amplio.'
     ]
   },
   {
     id: 'mg_4_ev',
     name: 'MG 4 Electric',
     brand: 'MG',
-    model: 'MG 4',
-    yearRange: '2022 - 2025',
+    model: 'MG4',
+    yearRange: '2023 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (Compacto)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/MG4_Electric_%E2%80%93_f_21042025.jpg/330px-MG4_Electric_%E2%80%93_f_21042025.jpg',
-    engine: 'Motor Eléctrico Trasero (170 HP / 204 HP) / XPOWER 435 HP AWD',
+    badgeText: '100% Eléctrico RWD',
+    averagePrice: '$459,000 MXN',
+    priceRange: '$425,000 - $530,000 MXN (~$25,000 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/2022_MG4_EV_SE_Long_Range_Front.jpg/330px-2022_MG4_EV_SE_Long_Range_Front.jpg',
+    engine: 'Motor Trasero RWD (170 HP o 204 HP Long Range)',
     power: '170 - 204 HP',
-    fuelType: '100% Eléctrico (Batería 51 kWh LFP o 64 kWh Ternaria)',
+    fuelType: '100% Eléctrico (Batería One Pack 110 mm)',
     consumption: {
       kwhPer100Km: 16.0,
       kmPerKwh: 6.25,
@@ -529,16 +595,16 @@ const VEHICLES_SPECS_CATALOG = [
       maxChargeAcKw: 11.0,
       maxChargeDcKw: 135.0,
       chargingTimes: {
-        schuko23: '18 h (20% a 80% a 2.3 kW)',
-        wallbox74: '5 h 15 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '26 min (10% a 80% en toma DC 135 kW)'
+        schuko23: '27 h (enchufe 2.3 kW)',
+        wallbox74: '8 h 50 min (Wallbox 7.4 kW)',
+        fastChargeDc: '32 min (DC 135 kW 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Batería ultradelgada "One Pack" de solo 11 cm de espesor en el suelo.',
-      'Excelente dinamismo con tracción trasera y reparto de pesos 50:50.',
-      'Uno de los coches eléctricos más asequibles de su segmento en Europa y América.'
+      'Tracción trasera con reparto de pesos 50:50 para un manejo deportivo.',
+      'Batería ultrafina de 110 mm que maximiza la habitabilidad interior.',
+      'Excelente relación precio-autonomía en el segmento de compactos eléctricos.'
     ]
   },
   {
@@ -546,63 +612,67 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Kia EV6',
     brand: 'Kia',
     model: 'EV6',
-    yearRange: '2021 - 2025',
+    yearRange: '2022 - 2025',
     type: 'electric',
-    badgeText: '100% Eléctrico (Crossover)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/2021_Kia_EV6_GT-Line_S.jpg/330px-2021_Kia_EV6_GT-Line_S.jpg',
-    engine: 'Motor Trasero (229 HP) o Dual Motor AWD (325 HP / 585 HP GT)',
-    power: '229 - 325 HP',
-    fuelType: '100% Eléctrico (Batería 77.4 kWh)',
+    badgeText: '100% Eléctrico Crossover',
+    averagePrice: '$990,000 MXN',
+    priceRange: '$920,000 - $1,250,000 MXN (~$53,800 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Kia_EV6_IMG_5419.jpg/330px-Kia_EV6_IMG_5419.jpg',
+    engine: 'Tracción RWD (229 HP) o Dual Motor AWD (325 HP / GT 585 HP)',
+    power: '229 - 585 HP',
+    fuelType: '100% Eléctrico 800V',
     consumption: {
-      kwhPer100Km: 16.5,
-      kmPerKwh: 6.06,
+      kwhPer100Km: 16.8,
+      kmPerKwh: 5.95,
       batteryCapacityKwh: 77.4,
       estimatedRangeKm: 528,
       maxChargeAcKw: 11.0,
-      maxChargeDcKw: 240.0,
+      maxChargeDcKw: 233.0,
       chargingTimes: {
-        schuko23: '21 h (20% a 80% a 2.3 kW)',
-        wallbox74: '6 h 20 min (20% a 80% a 7.4 kW)',
-        fastChargeDc: '18 min (10% a 80% a 240 kW DC)'
+        schuko23: '33 h (enchufe 2.3 kW)',
+        wallbox74: '10 h 45 min (Wallbox 7.4 kW)',
+        fastChargeDc: '18 min (Supercargador 800V 10-80%)'
       }
     },
-    co2Emissions: '0 g/km (Etiqueta CERO Emisiones)',
+    co2Emissions: '0 g/km (Etiqueta CERO)',
     highlights: [
-      'Ganador del premio Coche del Año en Europa (Car of the Year 2022).',
-      'Plataforma E-GMP con carga ultrarrápida 800V y autonomía que supera los 520 km.',
-      'Capacidad de remolque homologada de hasta 1.600 kg con freno.'
+      'Elegido Coche del Año en Europa por su diseño vanguardista y prestaciones.',
+      'Recarga ultra-veloz de 800V con soporte bidireccional V2L.',
+      'Dirección ágil y dinámica de chasis superior para viajes largos por autopista.'
     ]
   },
 
   // =========================================================================
-  // 3. MOTOCICLETAS URBANAS Y DE USO DIARIO
+  // 3. MOTOCICLETAS Y SCOOTERS URBANOS / DEPORTIVOS
   // =========================================================================
   {
     id: 'honda_cb125f',
     name: 'Honda CB125F (Twister / CBF)',
     brand: 'Honda',
     model: 'CB125F',
-    yearRange: '2019 - 2025',
+    yearRange: '2021 - 2025',
     type: 'moto',
-    badgeText: 'Moto Urbana 125cc (4T)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Honda_CBF125_2009.jpg/330px-Honda_CBF125_2009.jpg',
-    engine: 'Monocilíndrico 124cc 4T eSP e Inyección PGM-FI Refrigerado por Aire',
-    power: '10.9 HP @ 7.500 RPM',
+    badgeText: 'Motocicleta Urbana',
+    averagePrice: '$36,900 MXN',
+    priceRange: '$34,000 - $39,500 MXN (~$2,000 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Honda_CBF125_2011.JPG/330px-Honda_CBF125_2011.JPG',
+    engine: '124.8cc Monocilíndrico 4T eSP Inyección PGM-FI refrigerado por aire',
+    power: '11 HP @ 7.500 RPM',
     fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
-      city: 55.0,
-      hwy: 48.0,
-      combined: 51.5,
+      city: 65.0,
+      hwy: 55.0,
+      combined: 60.0,
       tankCapacityL: 11.0,
-      estimatedRangeKm: 566,
-      oilViscosity: '10W-30 / 10W-40 JASO MA (4 Tiempos)',
+      estimatedRangeKm: 660,
+      oilViscosity: '10W-30 4T JASO MA (Norma Honda)',
       oilCapacityL: 0.9
     },
-    co2Emissions: '34 g/km (Norma Euro 5)',
+    co2Emissions: '34 g/km (Etiqueta C)',
     highlights: [
-      'Récord de ahorro: rinde más de 50 km por cada litro en ciudad.',
-      'Depósito de 11 L que permite recorrer más de 550 km con un solo tanque.',
-      'Motor eSP con alternador inteligente ACG y mínimo peso de solo 117 kg.'
+      'Rendimiento legendario de 60 km por litro con tecnología eSP de baja fricción.',
+      'Un solo tanque de 11 litros rinde más de 650 km de autonomía real.',
+      'Frenada combinada CBS y arranque silencioso ACG sin motor de arranque convencional.'
     ]
   },
   {
@@ -610,11 +680,13 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Honda Wave 110i / S',
     brand: 'Honda',
     model: 'Wave 110',
-    yearRange: '2018 - 2025',
+    yearRange: '2020 - 2025',
     type: 'moto',
-    badgeText: 'Moped / Cub 110cc',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Honda_Wave_125_S_2007.jpg/330px-Honda_Wave_125_S_2007.jpg',
-    engine: 'Monocilíndrico 109cc 4T OHC con Cambio Semiautomático (4 vel.)',
+    badgeText: 'Moped / Cub',
+    averagePrice: '$32,900 MXN',
+    priceRange: '$30,000 - $35,500 MXN (~$1,790 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Honda_Wave_110i_%28cropped%29.jpg/330px-Honda_Wave_110i_%28cropped%29.jpg',
+    engine: '109cc 4 Tiempos OHC con embrague centrífugo semiautomático',
     power: '8.5 HP @ 7.500 RPM',
     fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
@@ -623,14 +695,14 @@ const VEHICLES_SPECS_CATALOG = [
       combined: 54.0,
       tankCapacityL: 3.7,
       estimatedRangeKm: 200,
-      oilViscosity: '10W-30 / 20W-50 JASO MA',
+      oilViscosity: '10W-30 / 20W-50 4T',
       oilCapacityL: 0.8
     },
-    co2Emissions: '31 g/km',
+    co2Emissions: '38 g/km',
     highlights: [
-      'La moto de trabajo y reparto urbano más robusta y económica del planeta.',
-      'Embrague centrífugo semiautomático: se cambian marchas sin maneta de embrague.',
-      'Costo de llenado casi insignificante con tanque de 3.7 litros.'
+      'La moto de reparto más económica y resistente de América Latina.',
+      'Caja de 4 velocidades rotativa sin maneta de embrague muy fácil de usar.',
+      'Costo de refacciones y mantenimiento mínimo accesible para cualquier taller.'
     ]
   },
   {
@@ -638,27 +710,29 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Yamaha YBR 125 / YB125',
     brand: 'Yamaha',
     model: 'YBR 125',
-    yearRange: '2016 - 2025',
+    yearRange: '2019 - 2025',
     type: 'moto',
-    badgeText: 'Moto Urbana 125cc (4T)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Yamaha_YBR125_%28Fuel_Injection_-_EU_Spec%29.JPG/330px-Yamaha_YBR125_%28Fuel_Injection_-_EU_Spec%29.JPG',
-    engine: 'Monocilíndrico 124cc 4T SOHC 2 Válvulas con Eje de Equilibrado',
-    power: '10.0 HP @ 7.800 RPM',
+    badgeText: 'Motocicleta de Trabajo',
+    averagePrice: '$41,999 MXN',
+    priceRange: '$38,000 - $45,000 MXN (~$2,280 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Yamaha_YBR125_Custom_2008.jpg/330px-Yamaha_YBR125_Custom_2008.jpg',
+    engine: '124cc 4T SOHC 2 Válvulas refrigerado por aire',
+    power: '10 HP @ 7.800 RPM',
     fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
-      city: 44.0,
-      hwy: 38.0,
-      combined: 41.0,
+      city: 45.0,
+      hwy: 40.0,
+      combined: 42.0,
       tankCapacityL: 13.0,
-      estimatedRangeKm: 533,
-      oilViscosity: '10W-40 / 20W-50 Yamalube 4T JASO MA2',
+      estimatedRangeKm: 546,
+      oilViscosity: '20W-50 / 10W-40 Yamalube 4T',
       oilCapacityL: 1.0
     },
-    co2Emissions: '38 g/km',
+    co2Emissions: '44 g/km',
     highlights: [
-      'Eje de equilibrado interno que elimina casi por completo las vibraciones.',
-      'Depósito grande de 13 L para un vehículo de 125cc (más de 500 km de autonomía).',
-      'Fiabilidad mecánica legendaria utilizada tanto para uso personal como de flota.'
+      'Tanque amplio de 13 litros que permite olvidarse de repostar durante semanas.',
+      'Mecánica extremadamente duradera con repuestos disponibles en todo el país.',
+      'Posición de manejo muy erguida y asiento acolchado para jornadas de 8 horas.'
     ]
   },
   {
@@ -666,27 +740,29 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Yamaha NMAX 125 / 155',
     brand: 'Yamaha',
     model: 'NMAX',
-    yearRange: '2020 - 2025',
+    yearRange: '2021 - 2025',
     type: 'moto',
-    badgeText: 'Scooter Urbano Premium',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Yamaha_nmax_cpd150_YCP.JPG/330px-Yamaha_nmax_cpd150_YCP.JPG',
-    engine: 'Monocilíndrico 125cc Blue Core 4V con Distribución Variable (VVA) y CVT',
-    power: '12.2 HP @ 8.000 RPM',
+    badgeText: 'Maxi-Scooter',
+    averagePrice: '$89,999 MXN',
+    priceRange: '$82,000 - $97,000 MXN (~$4,890 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Yamaha_NMAX_155_in_Chiang_Mai.jpg/330px-Yamaha_NMAX_155_in_Chiang_Mai.jpg',
+    engine: '125cc / 155cc Blue Core 4V con distribución variable VVA',
+    power: '12.2 - 15.1 HP',
     fuelType: 'Gasolina Regular',
     consumption: {
-      city: 43.5,
-      hwy: 39.0,
-      combined: 41.5,
+      city: 46.0,
+      hwy: 40.0,
+      combined: 43.5,
       tankCapacityL: 7.1,
-      estimatedRangeKm: 295,
-      oilViscosity: '10W-40 Yamalube Scooter 4T JASO MB',
+      estimatedRangeKm: 308,
+      oilViscosity: '10W-40 Yamalube 4-S Scooter',
       oilCapacityL: 0.9
     },
-    co2Emissions: '44 g/km (Euro 5)',
+    co2Emissions: '45 g/km',
     highlights: [
-      'Transmisión automática CVT: acelerar y frenar sin cambios de marcha.',
-      'Control de tracción TCS, frenos ABS de doble canal y llave inteligente Smart Key.',
-      'Maletero bajo el asiento con espacio para un casco integral.'
+      'Motor con válvula variable VVA que ofrece empuje vigoroso a altas revoluciones.',
+      'Control de tracción TCS y frenos ABS en ambas ruedas para pavimento mojado.',
+      'Espacio bajo el asiento para un casco integral y arranque Smart Key sin llave.'
     ]
   },
   {
@@ -696,25 +772,27 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'MT-03',
     yearRange: '2020 - 2025',
     type: 'moto',
-    badgeText: 'Naked Deportiva (Bicilíndrica)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Moscow%2C_Yamaha_MT-03%2C_June_2025_01.jpg/330px-Moscow%2C_Yamaha_MT-03%2C_June_2025_01.jpg',
-    engine: 'Bicilíndrico en Línea 321cc DOHC 8V Refrigerado por Líquido',
-    power: '42.0 HP @ 10.750 RPM',
-    fuelType: 'Gasolina Regular o Premium (91+ Octanos)',
+    badgeText: 'Naked Deportiva',
+    averagePrice: '$154,999 MXN',
+    priceRange: '$145,000 - $168,000 MXN (~$8,420 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Yamaha_MT-03_at_Tokyo_Motor_Show_2019.jpg/330px-Yamaha_MT-03_at_Tokyo_Motor_Show_2019.jpg',
+    engine: '321cc Bicilíndrico en línea DOHC 8V refrigeración líquida',
+    power: '42 HP @ 10.750 RPM',
+    fuelType: 'Gasolina Premium (91+ Octanos)',
     consumption: {
-      city: 24.0,
-      hwy: 29.5,
-      combined: 26.5,
+      city: 23.5,
+      hwy: 28.0,
+      combined: 25.5,
       tankCapacityL: 14.0,
-      estimatedRangeKm: 371,
-      oilViscosity: '10W-40 Sintético JASO MA2',
+      estimatedRangeKm: 357,
+      oilViscosity: '10W-40 Sintético Yamalube 4R',
       oilCapacityL: 2.1
     },
     co2Emissions: '89 g/km',
     highlights: [
-      'Motor bicilíndrico de altas revoluciones (corte a 12.500 RPM) muy emocionante.',
-      'Horquilla delantera invertida KYB de 37 mm y postura de conducción erguida.',
-      'Excelente tanto para traslados diarios rápidos como para escapadas de fin de semana.'
+      'Motor bicilíndrico alegre y progresivo capaz de alcanzar 180 km/h.',
+      'Horquilla invertida KYB delantera de 37 mm con gran aplomo en curvas.',
+      'Diseño agresivo de la saga Hyper Naked Dark Side of Japan con faros LED.'
     ]
   },
   {
@@ -724,25 +802,27 @@ const VEHICLES_SPECS_CATALOG = [
     model: 'Pulsar NS 200',
     yearRange: '2019 - 2025',
     type: 'moto',
-    badgeText: 'Naked Urbana (200cc)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Bajaj-NS400Z.jpg/330px-Bajaj-NS400Z.jpg',
-    engine: 'Monocilíndrico 199.5cc 4T Triple Bujía (DTS-i) 4 Válvulas Refrigeración Líquida',
-    power: '24.5 HP @ 9.750 RPM',
-    fuelType: 'Gasolina Regular (87+ Octanos)',
+    badgeText: 'Street Naked',
+    averagePrice: '$61,999 MXN',
+    priceRange: '$56,000 - $67,000 MXN (~$3,370 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Bajaj_Pulsar_200_NS_right_view.jpg/330px-Bajaj_Pulsar_200_NS_right_view.jpg',
+    engine: '199.5cc 4V Triple Bujía DTS-i refrigeración líquida',
+    power: '24.1 HP @ 9.750 RPM',
+    fuelType: 'Gasolina Regular o Premium',
     consumption: {
       city: 35.0,
       hwy: 40.0,
       combined: 37.0,
       tankCapacityL: 12.0,
       estimatedRangeKm: 444,
-      oilViscosity: '20W-50 Semi-Sintético JASO MA2',
+      oilViscosity: '20W-50 Bajaj DTS-i Premium Oil',
       oilCapacityL: 1.2
     },
     co2Emissions: '62 g/km',
     highlights: [
-      'Tecnología DTS-i de triple bujía para una combustión completa y potente.',
-      'Caja de 6 velocidades con embrague asistido antirrebote.',
-      'Chasis perimetral de acero con monoamortiguador Nitrox con depósito de gas.'
+      'Chasis perimetral de acero prensado para máxima rigidez y maniobrabilidad.',
+      'Tecnología DTS-i de triple bujía que optimiza la quema de combustible.',
+      'La 200cc con mejor relación potencia-precio del mercado latinoamericano.'
     ]
   },
   {
@@ -750,55 +830,59 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'KTM 390 Duke',
     brand: 'KTM',
     model: '390 Duke',
-    yearRange: '2020 - 2025',
+    yearRange: '2021 - 2025',
     type: 'moto',
-    badgeText: 'Naked Deportiva (399cc)',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Ktm_duke_390.jpg/330px-Ktm_duke_390.jpg',
-    engine: 'Monocilíndrico 399cc 4T DOHC 4V Refrigeración Líquida (45 HP)',
-    power: '45.0 HP @ 8.500 RPM',
-    fuelType: 'Gasolina 95 Octanos',
+    badgeText: 'Naked Corner Rocket',
+    averagePrice: '$149,900 MXN',
+    priceRange: '$139,000 - $162,000 MXN (~$8,150 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/KTM_390_Duke_2017_right.jpg/330px-KTM_390_Duke_2017_right.jpg',
+    engine: '373cc / 399cc Monocilíndrico 4T DOHC 4V refrigeración líquida',
+    power: '44 HP @ 9.000 RPM (37 Nm torque)',
+    fuelType: 'Gasolina 95+ Octanos',
     consumption: {
       city: 25.0,
-      hwy: 31.0,
+      hwy: 30.0,
       combined: 27.5,
-      tankCapacityL: 15.0,
-      estimatedRangeKm: 412,
-      oilViscosity: '15W-50 Full Synthetic Motorex JASO MA2',
+      tankCapacityL: 13.4,
+      estimatedRangeKm: 368,
+      oilViscosity: '15W-50 Motorex Formula 4T Full Synthetic',
       oilCapacityL: 1.7
     },
     co2Emissions: '79 g/km',
     highlights: [
-      'La reina de la relación peso/potencia en su categoría (solo 165 kg con 45 HP).',
-      'Electrónica avanzada con acelerador Ride-by-Wire y modos de conducción.',
-      'Frenos ByBre con ABS en curva y modo Supermoto desconectable detrás.'
+      'Potencia descomunal para un monocilíndrico con aceleración de referencia.',
+      'Suspensiones WP APEX ajustables y frenos radiales ByBre de 4 pistones.',
+      'Modo Supermoto ABS y pantalla TFT a color con conectividad smartphone.'
     ]
   },
   {
     id: 'honda_pcx_125',
     name: 'Honda PCX 125',
     brand: 'Honda',
-    model: 'PCX',
+    model: 'PCX 125',
     yearRange: '2021 - 2025',
     type: 'moto',
-    badgeText: 'Scooter Urbano GT',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Honda_PCX125_2011_Front.JPG/330px-Honda_PCX125_2011_Front.JPG',
-    engine: 'Monocilíndrico 125cc eSP+ 4 Válvulas con Sistema Idling Stop (Paro al ralentí)',
+    badgeText: 'Scooter Premium',
+    averagePrice: '$79,900 MXN',
+    priceRange: '$73,000 - $86,000 MXN (~$4,340 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Honda_PCX125_2018.jpg/330px-Honda_PCX125_2018.jpg',
+    engine: '125cc eSP+ 4 Válvulas con parada automática Idling Stop',
     power: '12.5 HP @ 8.750 RPM',
-    fuelType: 'Gasolina Regular 87 Octanos',
+    fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
-      city: 47.5,
-      hwy: 42.0,
-      combined: 45.0,
+      city: 47.6,
+      hwy: 44.0,
+      combined: 46.0,
       tankCapacityL: 8.1,
-      estimatedRangeKm: 364,
-      oilViscosity: '10W-30 Honda 4T JASO MB',
+      estimatedRangeKm: 372,
+      oilViscosity: '10W-30 4T JASO MB',
       oilCapacityL: 0.9
     },
-    co2Emissions: '47 g/km (Euro 5)',
+    co2Emissions: '47 g/km',
     highlights: [
-      'Sistema Idling Stop que apaga el motor en los semáforos ahorrando hasta un 5% extra.',
-      'Hueco bajo el asiento ampliado a 30.4 litros para guardar casco y mochila.',
-      'Toma de carga USB-C en la guantera para recargar el smartphone mientras conduces.'
+      'Sistema Idling Stop apaga el motor en semáforos ahorrando hasta un 7% extra.',
+      'Control de par seleccionable Honda HSTC para evitar derrapes en pasos peatonales.',
+      'Maletero de 30.4 litros bajo el asiento con toma de carga USB-C en la guantera.'
     ]
   },
   {
@@ -806,58 +890,57 @@ const VEHICLES_SPECS_CATALOG = [
     name: 'Italika FT150 / Heavy Duty',
     brand: 'Italika',
     model: 'FT150',
-    yearRange: '2018 - 2025',
+    yearRange: '2019 - 2025',
     type: 'moto',
-    badgeText: 'Moto de Trabajo 150cc',
-    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Yamaha_YBR125_%28Fuel_Injection_-_EU_Spec%29.JPG/330px-Yamaha_YBR125_%28Fuel_Injection_-_EU_Spec%29.JPG',
-    engine: 'Monocilíndrico 149cc 4T OHV con Enfriamiento por Aire Natural',
-    power: '11.2 HP @ 8.500 RPM',
+    badgeText: 'Motocicleta Utilitaria',
+    averagePrice: '$23,499 MXN',
+    priceRange: '$20,000 - $26,999 MXN (~$1,280 USD)',
+    imageUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Italika_FT150_GTS.jpg/330px-Italika_FT150_GTS.jpg',
+    engine: '149cc 4 Tiempos Monocilíndrico Varillero (OHV)',
+    power: '14.4 HP @ 8.500 RPM',
     fuelType: 'Gasolina Regular (87 Octanos)',
     consumption: {
-      city: 35.0,
-      hwy: 30.0,
-      combined: 32.0,
-      tankCapacityL: 12.5,
-      estimatedRangeKm: 400,
-      oilViscosity: '20W-50 Mineral / Semi-Sintético 4T',
+      city: 32.0,
+      hwy: 36.0,
+      combined: 34.0,
+      tankCapacityL: 14.0,
+      estimatedRangeKm: 476,
+      oilViscosity: '20W-50 4T Mineral / Semisintético',
       oilCapacityL: 1.0
     },
-    co2Emissions: '48 g/km',
+    co2Emissions: '65 g/km',
     highlights: [
-      'La moto utilitaria más popular de México por su durabilidad y bajo costo de refacciones.',
-      'Parrilla de carga trasera reforzada lista para trabajo rudo o reparto.',
-      'Freno de tambor mecánico de fácil ajuste y mantenimiento muy económico.'
+      'La moto utilitaria más popular de México por su inmejorable costo de adquisición.',
+      'Motor varillero de mecánica elemental que cualquier mecánico repara al instante.',
+      'Parrilla de carga reforzada lista para cajas de delivery y carga pesada.'
     ]
   }
 ];
 
-// Módulo Exportable para el Navegador
-window.SPECS_CATALOG = {
-  vehicles: VEHICLES_SPECS_CATALOG,
+// Módulo de exportación global para el navegador y soporte en Worker/ESM
+if (typeof window !== 'undefined') {
+  window.SPECS_CATALOG = {
+    vehicles: VEHICLES_SPECS_CATALOG,
+    search(query = '', filterType = 'all') {
+      const cleanQuery = query.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return VEHICLES_SPECS_CATALOG.filter(v => {
+        if (filterType !== 'all' && v.type !== filterType) {
+          return false;
+        }
+        if (!cleanQuery) return true;
+        const targetText = `${v.name} ${v.brand} ${v.model} ${v.engine} ${v.fuelType} ${v.yearRange}`
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+        return targetText.includes(cleanQuery);
+      });
+    },
+    getById(id) {
+      return VEHICLES_SPECS_CATALOG.find(v => v.id === id);
+    }
+  };
+}
 
-  // Búsqueda inteligente por texto y categoría
-  search(query = '', filterType = 'all') {
-    const cleanQuery = query.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    
-    return VEHICLES_SPECS_CATALOG.filter(v => {
-      // Filtro por categoría
-      if (filterType !== 'all' && v.type !== filterType) {
-        return false;
-      }
-      if (!cleanQuery) return true;
-
-      // Normalizar campos del vehículo para matching
-      const targetText = `${v.name} ${v.brand} ${v.model} ${v.engine} ${v.fuelType} ${v.yearRange}`
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
-      return targetText.includes(cleanQuery);
-    });
-  },
-
-  // Obtener por ID único
-  getById(id) {
-    return VEHICLES_SPECS_CATALOG.find(v => v.id === id);
-  }
-};
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { VEHICLES_SPECS_CATALOG };
+}
