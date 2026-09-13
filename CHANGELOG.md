@@ -61,6 +61,15 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Botón `[ 🏷️ Pines ]` en la barra superior para activar o desactivar los pines flotantes a demanda.
 
 ### Corregido
+- **Fijación de Centro y Bloqueo de Descuadre en Móviles (`disable-pan`)**:
+  - Inclusión del atributo `disable-pan` en `<model-viewer>` para impedir que gestos de pellizco para zoom o contactos multitáctiles accidentales desplacen el centro de cámara (`camera-target`). El vehículo permanece perfectamente centrado en todo momento en teléfonos móviles, exactamente igual que en PC.
+- **Aislamiento de Gestos Táctiles Verticales (`touch-action: none`)**:
+  - Establecimiento de `touch-action="none"` y `overscroll-behavior: contain` en el lienzo 3D. Deslizar verticalmente con el dedo sobre el vehículo ahora inclina el modelo en 3D en lugar de hacer scroll accidental en la página web. El desplazamiento vertical de la página queda reservado para arrastrar fuera del visor (cabecera, pestañas, selector de piezas o márgenes).
+- **Corrección de Líneas Negras en Ruedas del Coche Eléctrico**:
+  - Eliminación de los insertos de turbina con aspas negras en el eje de las ruedas de `electric_xray.glb`, que creaban un artefacto visual de falso movimiento indeseado. Se instalaron llantas deportivas estáticas de aleación con 5 radios de aluminio pulido y tapa de buje central idénticas a las del coche de gas.
+- **Rediseño Minimalista de Iconos de Marca AutoFind**:
+  - Creación del nuevo logotipo vectorial en `icons/icon.svg` con silueta aerodinámica limpia combinada con retícula/lupa de diagnóstico y enfoque.
+  - Regeneración con renderizado nítido de los iconos de aplicación `icon-192.png` y `icon-512.png`, además del nuevo icono de lupa automotriz en el encabezado de `index.html`.
 - **Alineación Concéntrica Carrocería vs Chasis (Efecto Rayos X)**:
   - Corrección en la orientación angular y centrado automático en el eje X para el capó, cabina y maletero extruidos.
   - Se eliminó el desfase lateral y angular que situaba la carrocería translúcida azul al costado derecho del chasis, logrando que la silueta holográfica envuelva de forma concéntrica y precisa (`Mid X: 0.000`) todos los componentes mecánicos, ruedas, suspensión y habitáculo interior.

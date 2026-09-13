@@ -1,5 +1,5 @@
 // Service Worker para AutoFind Lab PWA (Optimizado para GitHub Pages y Localhost)
-const CACHE_NAME = 'autofind-v1.3.0-3d';
+const CACHE_NAME = 'autofind-v1.3.1-3d';
 
 // Recursos relativos al scope del Service Worker
 const RELATIVE_ASSETS = [

@@ -245,6 +245,8 @@ body {
 model-viewer {
   --poster-color: transparent;
   background-color: #060911;
+  touch-action: none;
+  overscroll-behavior: contain;
   background-image: 
     radial-gradient(ellipse at 50% 40%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
     linear-gradient(rgba(30, 41, 59, 0.25) 1px, transparent 1px),
