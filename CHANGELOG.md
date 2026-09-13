@@ -81,6 +81,10 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - **Desbloqueo Total de Puntero (Arrastre 360° en Todo el Visor)**:
   - Eliminación de contenedor invisible superpuesto dentro de `<model-viewer>` que interceptaba clics y gestos táctiles.
   - Activación de `pointer-events: none` en las capas overlay HUD y cursor de agarre dinámico (`cursor: grab / grabbing`), permitiendo rotar 360° y hacer zoom desde cualquier coordenada del visor técnico.
+- **Corrección Definitiva de Ruedas del Vehículo Eléctrico (Erradicación de Z-Fighting)**:
+  - Se eliminó la coplanaridad entre el cilindro del neumático de goma oscura (`rubberDark`) y el cilindro de la llanta de aluminio (`polishedAlum`), la cual causaba parpadeo y un patrón estriado en forma de franjas negras ("efecto de movimiento") debido a colisión en el búfer de profundidad (Z-buffer de WebGL).
+  - Configuración geométrica escalonada con tolerancias idénticas y optimizadas respecto al modelo de combustión: neumático a ancho 0.21, llanta a 0.23 (sobresaliendo 10 mm sobre la cara del neumático), 5 radios dobles de aleación a 0.236 y tapa de buje central en acero oscuro a 0.242.
+  - Actualización de versión de caché a `autofind-v1.5.0-clean` y query string `?v=1.5.0` en `data.js` para forzar la recarga inmediata del modelo 3D corregido sin residuos de caché en clientes y navegadores móviles.
 - **Estados Activos Coordinados**:
   - Resaltado lumínico sincronizado (`.is-active`) en chips inferiores, tarjeta flotante y modelo 3D.
 
