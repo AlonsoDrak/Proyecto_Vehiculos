@@ -222,7 +222,6 @@ class AutoFindApp {
     }
 
     // Asistente de diagnóstico de averías
-    const btnToggleDiagnosis = document.getElementById('btnToggleDiagnosis');
     const btnCloseDiagnosis = document.getElementById('btnCloseDiagnosis');
     const diagnosisPanel = document.getElementById('diagnosisPanel');
 
@@ -814,6 +813,7 @@ class AutoFindApp {
     // Mostrar modal con animación
     const modal = document.getElementById('componentModal');
     if (modal) {
+      modal.classList.remove('hidden');
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden'; // Evitar scroll del fondo
     }
@@ -848,6 +848,7 @@ class AutoFindApp {
     const modal = document.getElementById('componentModal');
     if (modal) {
       modal.classList.remove('is-open');
+      modal.classList.add('hidden');
       document.body.style.overflow = '';
     }
   }

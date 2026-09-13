@@ -9,6 +9,13 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [En desarrollo] (Rama: Mejoras)
 
+### Corregido
+- **Desbloqueo Total de Interacción y Clics en la Interfaz**:
+  - Se corrigió error fatal de sintaxis (`SyntaxError: Identifier 'btnToggleDiagnosis' has already been declared`) en `js/app.js` provocado por una doble declaración de variable en el mismo ámbito de función. Este fallo impedía que el motor JavaScript del navegador ejecutara `AutoFindApp`, impidiendo el registro de todos los event listeners de clics en pestañas, botones y tarjetas (dejando únicamente operativo el Web Component autónomo `<model-viewer>`).
+  - Se añadió explícitamente la clase `hidden` al contenedor `#componentModal` en `index.html` y se sincronizó su ciclo de vida en `openModal()` y `closeModal()`, impidiendo que un div fijo a pantalla completa (`fixed inset-0 z-50`) interceptara de forma invisible los eventos de puntero.
+  - Se restauraron y blindaron las reglas de `.modal-backdrop` en `css/styles.css` con `pointer-events: none` y `visibility: hidden` cuando el modal está en reposo.
+  - Actualización de versión del Service Worker a `autofind-v1.8.0-fix-events` para forzar la actualización inmediata en GitHub Pages y localhost.
+
 ### Añadido
 - **Sección Dedicada: Buscador de Vehículos & Fichas de Consumo del Día a Día (`js/finder.js` y `js/specs-catalog.js`)**:
   - Nueva vista dedicada accesible desde el selector de modo principal en la cabecera: `[ 🛠️ Rayos X 3D ]` ⇄ `[ 🔍 Buscador & Consumos ]`.
