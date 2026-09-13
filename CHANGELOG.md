@@ -10,6 +10,20 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [En desarrollo] (Rama: Mejoras)
 
 ### Añadido
+- **Sección Dedicada: Buscador de Vehículos & Fichas de Consumo del Día a Día (`js/finder.js` y `js/specs-catalog.js`)**:
+  - Nueva vista dedicada accesible desde el selector de modo principal en la cabecera: `[ 🛠️ Rayos X 3D ]` ⇄ `[ 🔍 Buscador & Consumos ]`.
+  - **Buscador predictivo instantáneo** con filtros rápidos por categoría (`Todos`, `Gasolina/Gas`, `Eléctricos EV`, `Motocicletas`).
+  - **Catálogo local enriquecido de alta fidelidad** con más de 25 modelos populares en España y Latinoamérica con especificaciones completas:
+    - *Combustión*: Consumos en ciudad/carretera/mixto (km/L), capacidad de depósito (L), autonomía estimada (km), aceites de motor y distintivos ambientales.
+    - *Eléctricos (EV)*: Consumo energético (kWh/100km y km/kWh), capacidad de batería neta (kWh), autonomía real, potencia de carga AC/DC y tiempos de recarga estimados por tipo de enchufe (Doméstico Schuko 2.3 kW, Wallbox 7.4 kW y Carga Rápida DC).
+    - *Motocicletas*: Rendimiento ultraligero (35 a 58 km/L), capacidad de tanque, aceite 4T y costos de llenado mínimos.
+  - **Extracción de fotos reales de los vehículos**:
+    - Enlaces directos verificados en alta resolución desde Wikimedia Commons para todos los vehículos del catálogo local.
+    - Integración con la **API pública REST de Wikipedia** para consultar dinámicamente imágenes de vehículos no presentes en la lista local.
+  - **Calculadora interactiva de costos en vivo**:
+    - Deslizadores (*sliders*) interactivos para ajustar el precio del litro de gasolina o la tarifa por kWh de electricidad, junto con el kilometraje diario habitual.
+    - Cálculos automáticos en tiempo real: costo de llenado de tanque / recarga completa, costo por cada 100 km y presupuesto mensual estimado de transporte.
+  - **Diseño sin enlaces a 3D**: Las fichas técnicas se centran 100% en datos prácticos y económicos del conductor, sin redirección al modelo 3D.
 - **Renombramiento de la Aplicación a AutoFind Lab**:
   - Cambio oficial del nombre e identidad de la aplicación de **AutoMeca** a **AutoFind** (nombre corto PWA: **AutoFind**, nombre completo: **AutoFind Lab**).
   - Actualización integral en `index.html`, `manifest.json`, `sw.js` (caché `autofind-v1.3.0-3d`), `server.js`, `styles.css`, `icons/icon.svg` y controlador principal `AutoFindApp` en `js/app.js`.

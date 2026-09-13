@@ -380,3 +380,80 @@ model-viewer:active {
   cursor: grabbing;
 }
 
+/* ==========================================================================
+   ESTILOS PARA EL BUSCADOR DE VEHÍCULOS Y FICHA DE ESPECIFICACIONES
+   ========================================================================== */
+
+/* Tarjetas de vehículos */
+.vehicle-spec-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.vehicle-spec-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 12px 30px -8px rgba(6, 182, 212, 0.2);
+}
+
+/* Sliders de la calculadora interactiva */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #1e293b;
+  border-radius: 9999px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #00e5ff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+  border: 2px solid #ffffff;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #00e5ff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+  border: 2px solid #ffffff;
+}
+
+/* Animación del modal de ficha técnica */
+#modalSpecsDetail:not(.hidden) {
+  animation: fadeInModal 0.25s ease-out forwards;
+}
+
+#modalSpecsDetail:not(.hidden) > div:last-child {
+  animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+

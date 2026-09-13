@@ -1,5 +1,5 @@
 // Service Worker para AutoFind Lab PWA (Optimizado para GitHub Pages y Localhost)
-const CACHE_NAME = 'autofind-v1.6.0-clean';
+const CACHE_NAME = 'autofind-v1.7.0-specs';
 
 // Recursos relativos al scope del Service Worker
 const RELATIVE_ASSETS = [
@@ -8,6 +8,8 @@ const RELATIVE_ASSETS = [
   './manifest.json',
   './css/styles.css',
   './js/data.js',
+  './js/specs-catalog.js',
+  './js/finder.js',
   './js/schematics.js',
   './js/app.js',
   './models/combustion_xray.glb',

@@ -59,6 +59,21 @@
         </div>
       </div>
 
+      
+      <!-- Selector de Modo: Visor 3D vs Buscador & Consumos -->
+      <nav class="flex items-center p-1 bg-slate-900/90 rounded-xl border border-slate-800 shadow-inner">
+        <button id="navTab3D" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95">
+          <span>🛠️</span>
+          <span class="hidden md:inline">Rayos X 3D</span>
+          <span class="md:hidden">3D</span>
+        </button>
+        <button id="navTabFinder" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 transition-all active:scale-95">
+          <span>🔍</span>
+          <span class="hidden md:inline">Buscador & Consumos</span>
+          <span class="md:hidden">Buscador</span>
+        </button>
+      </nav>
+
       <!-- Acciones de Cabecera: Diagnóstico Rápido y Botón Instalar PWA -->
       <div class="flex items-center gap-2 sm:gap-3">
         <!-- Botón Asistente de Diagnóstico -->
@@ -81,6 +96,9 @@
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-4 sm:px-6 sm:py-6 flex flex-col gap-6">
+
+    <!-- VISTA 1: RAYOS X 3D & AVERÍAS -->
+    <div id="view3DMode" class="flex flex-col gap-6">
 
     <!-- SELECTOR DE VEHÍCULO (Tabs estilo Automotive Cockpit) -->
     <section aria-label="Selección de tipo de vehículo">
@@ -340,6 +358,104 @@
 
     </section>
 
+    </div> <!-- /view3DMode -->
+
+    <!-- VISTA 2 DEDICADA: BUSCADOR DE VEHÍCULOS Y FICHAS DE CONSUMO DIARIO -->
+    <div id="viewSpecsFinder" class="hidden flex flex-col gap-6">
+      
+      <!-- HERO BANNER Y BUSCADOR -->
+      <section class="glass-panel rounded-3xl p-5 sm:p-8 flex flex-col gap-5 border border-slate-800/80 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -top-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col gap-1 max-w-2xl relative z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 text-cyan-400 text-xs font-bold border border-cyan-800/50 w-max">
+            <span>🔍</span> Catálogo & Calculadora de Costos
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
+            Encuentra tu Vehículo & Consulta sus Especificaciones
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">
+            Comprueba el consumo homologado (km/L o kWh/100km), tamaño de tanque o batería, tiempos de recarga y simula tu gasto de combustible o electricidad en tiempo real.
+          </p>
+        </div>
+
+        <!-- Input de Búsqueda Predictiva -->
+        <div class="relative max-w-3xl w-full z-10">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="specsSearchInput" 
+            placeholder="Busca por marca o modelo: ej. Corolla, Tesla Model 3, Versa, Golf, Dolphin, Wave, MT-03..." 
+            class="w-full pl-12 pr-12 py-3.5 bg-slate-950/90 hover:bg-slate-950 focus:bg-slate-950 text-slate-100 placeholder-slate-500 text-sm sm:text-base rounded-2xl border border-slate-800 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 shadow-inner outline-none transition-all"
+          />
+          <button id="btnClearSpecsSearch" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-300 transition-colors" aria-label="Limpiar búsqueda">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Filtros Rápidos por Categoría (Chips) -->
+        <div class="flex flex-wrap items-center gap-2 pt-1 z-10">
+          <span class="text-xs text-slate-400 font-semibold mr-1">Filtrar por:</span>
+          <button data-type="all" class="specs-filter-chip is-active flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95">
+            <span>🌐</span>
+            <span>Todos los Vehículos</span>
+          </button>
+          <button data-type="combustion" class="specs-filter-chip flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border border-slate-700/50 transition-all active:scale-95">
+            <span>⛽</span>
+            <span>Gasolina / Gas</span>
+          </button>
+          <button data-type="electric" class="specs-filter-chip flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border border-slate-700/50 transition-all active:scale-95">
+            <span>⚡</span>
+            <span>Eléctricos (EV)</span>
+          </button>
+          <button data-type="moto" class="specs-filter-chip flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border border-slate-700/50 transition-all active:scale-95">
+            <span>🛵</span>
+            <span>Motocicletas</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- BARRA DE ESTADO DE RESULTADOS -->
+      <div class="flex items-center justify-between px-1">
+        <span id="specsResultsCount" class="text-xs sm:text-sm font-bold text-slate-400">
+          Cargando catálogo...
+        </span>
+        <span class="text-xs text-slate-500 hidden sm:inline-block">
+          💡 Selecciona una tarjeta para ver ficha completa y simular costos en vivo
+        </span>
+      </div>
+
+      <!-- GRID DE TARJETAS DE VEHÍCULOS -->
+      <section id="specsResultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Inyectado dinámicamente por VehicleSpecsFinder -->
+      </section>
+
+      <!-- ESTADO VACÍO (SIN COINCIDENCIAS) -->
+      <div id="specsEmptyState" class="hidden glass-panel rounded-3xl p-8 sm:p-12 flex flex-col items-center justify-center text-center gap-4 max-w-lg mx-auto border border-slate-800">
+        <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center text-3xl shadow-inner">
+          🔍
+        </div>
+        <div class="flex flex-col gap-1">
+          <h3 class="text-lg font-bold text-white">No se encontraron vehículos locales</h3>
+          <p class="text-xs text-slate-400">
+            No encontramos coincidencias para <span id="specsEmptyQuery" class="text-cyan-400 font-semibold"></span> en el catálogo rápido.
+          </p>
+        </div>
+        <button id="btnSearchGlobalWiki" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all active:scale-95">
+          <span>🌐</span>
+          <span>Buscar en Base Global (Wikipedia)</span>
+        </button>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- PIE DE PÁGINA -->
@@ -470,8 +586,30 @@
 
   </div>
 
+
+  <!-- MODAL DE FICHA TÉCNICA Y CALCULADORA (BUSCADOR DE ESPECIFICACIONES) -->
+  <div id="modalSpecsDetail" class="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 hidden transition-all duration-300">
+    <div id="modalSpecsBackdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"></div>
+    
+    <div class="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-3xl bg-slate-900 border border-slate-700/80 sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-left z-10">
+      
+      <!-- Botón flotante cerrar en esquina superior -->
+      <button id="btnCloseSpecsModal" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-950/80 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center border border-slate-700 backdrop-blur-md transition-all shadow-lg text-sm" aria-label="Cerrar ficha">
+        ✕
+      </button>
+
+      <!-- Contenedor con Scroll de la Ficha -->
+      <div id="modalSpecsBody" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+        <!-- Inyectado dinámicamente por VehicleSpecsFinder -->
+      </div>
+
+    </div>
+  </div>
+
   <!-- SCRIPTS MODULARES -->
   <script src="./js/data.js"></script>
+  <script src="./js/specs-catalog.js"></script>
+  <script src="./js/finder.js"></script>
   <script src="./js/schematics.js"></script>
   <script src="./js/app.js"></script>
 

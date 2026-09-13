@@ -32,6 +32,11 @@ class AutoFindApp {
 
     // 4. Renderizar estado inicial
     this.switchVehicle(this.currentVehicle);
+
+    // 5. Inicializar buscador de especificaciones si está presente
+    if (window.VehicleFinder && typeof window.VehicleFinder.init === 'function') {
+      window.VehicleFinder.init();
+    }
   }
 
   // CONFIGURACIÓN PWA Y SERVICE WORKER
@@ -81,6 +86,46 @@ class AutoFindApp {
 
   // VINCULACIÓN DE EVENTOS DEL USUARIO
   bindEvents() {
+    // Conmutador de Modo Principal: Rayos X 3D ⇄ Buscador de Especificaciones
+    const navTab3D = document.getElementById('navTab3D');
+    const navTabFinder = document.getElementById('navTabFinder');
+    const view3DMode = document.getElementById('view3DMode');
+    const viewSpecsFinder = document.getElementById('viewSpecsFinder');
+    const btnToggleDiagnosis = document.getElementById('btnToggleDiagnosis');
+
+    const switchMainAppMode = (mode) => {
+      this.appMode = mode;
+      if (mode === '3d') {
+        if (navTab3D) {
+          navTab3D.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95';
+        }
+        if (navTabFinder) {
+          navTabFinder.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 transition-all active:scale-95';
+        }
+        if (view3DMode) view3DMode.classList.remove('hidden');
+        if (viewSpecsFinder) viewSpecsFinder.classList.add('hidden');
+        if (btnToggleDiagnosis) btnToggleDiagnosis.classList.remove('hidden');
+      } else {
+        if (navTabFinder) {
+          navTabFinder.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95';
+        }
+        if (navTab3D) {
+          navTab3D.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 transition-all active:scale-95';
+        }
+        if (view3DMode) view3DMode.classList.add('hidden');
+        if (viewSpecsFinder) {
+          viewSpecsFinder.classList.remove('hidden');
+          if (window.VehicleFinder && typeof window.VehicleFinder.init === 'function') {
+            window.VehicleFinder.init();
+          }
+        }
+        if (btnToggleDiagnosis) btnToggleDiagnosis.classList.add('hidden');
+      }
+    };
+
+    if (navTab3D) navTab3D.addEventListener('click', () => switchMainAppMode('3d'));
+    if (navTabFinder) navTabFinder.addEventListener('click', () => switchMainAppMode('finder'));
+
     // Tabs de selección de vehículo
     document.querySelectorAll('.vehicle-tab').forEach(tab => {
       tab.addEventListener('click', () => {
