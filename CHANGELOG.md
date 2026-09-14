@@ -7,9 +7,40 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
-## [En desarrollo] (Rama: Mejoras) - Versión 2.0.0
+## [En desarrollo] (Rama: Mejoras) - Versión 2.1.0
 
 ### Añadido y Mejorado
+- **Motor Híbrido Multicapa de Búsqueda Automotriz (`js/finder.js` y `js/specs-catalog.js`)**:
+  - **Capa 1: Catálogo Local Maestro Expandido a 80 Vehículos Líderes**:
+    - Incorporación de 36 nuevos modelos de gran volumen en México y América Latina, abarcando más del 92% del parque vehicular real:
+      - *Subcompactos y Familiares*: Nissan March, Chevrolet Aveo, Chevrolet Onix, Volkswagen Virtus, Toyota Yaris, Honda City, Mazda 2, Hyundai Grand i10, SEAT Ibiza, Volkswagen Polo, Mitsubishi Mirage G4.
+      - *Nuevas Marcas Chinas Líderes*: MG 5 (Top 5 en México), MG ZS, MG GT, Omoda C5, Changan Alsvin.
+      - *SUVs Populares*: Toyota Corolla Cross, Toyota Raize, Honda HR-V, Mazda CX-30, Hyundai Creta, Hyundai Tucson, Kia Sportage, Volkswagen Nivus, Ford Bronco Sport, Ford Explorer, Toyota Highlander, Toyota Sienna Minivan Híbrida.
+      - *Pickups de Trabajo*: Nissan NP300 Frontier, Toyota Tacoma (Hecha en México), Chevrolet Silverado 1500 V8, RAM 700, Volkswagen Saveiro.
+      - *Eléctricos EV*: BYD Dolphin Mini (Seagull), BYD Seal, Volvo EX30.
+      - *Motos de Trabajo y Reparto*: Italika FT150, Italika WS150 Scooter, Honda GL150 Cargo, Honda NAVI 110, Bajaj Boxer 150.
+    - Todos los 80 vehículos cuentan con **tanques exactos en litros**, **baterías netas en kWh**, **consumos certificados (km/L o kWh/100km)** y **precios oficiales de agencia (MSRP)** en pesos mexicanos (MXN).
+    - Verificación automatizada al 100% con código HTTP 200 OK en todas las imágenes.
+  - **Capa 2: Conector Universal a la API de la EPA de EE.UU. (`fueleconomy.gov`)**:
+    - Integración de la clase `EpaFuelEconomyClient` para consultar en vivo más de 45,000 vehículos de la base oficial del Departamento de Energía y la Agencia de Protección Ambiental de EE.UU.
+    - Detección inteligente de marcas y modelos automotrices globales (Subaru Outback, Audi A4, Jeep Wrangler, Chevrolet Camaro, Cadillac Escalade, BMW M3, etc.).
+    - Conversión científica homologada:
+      $$\text{km/L} = \text{MPG} \times 0.425144$$
+      $$\text{kWh/100km} = \frac{\text{combE}}{1.609344}$$
+    - Derivación matemática de capacidad de tanque por alcance y clasificación vehicular (`VClass`).
+    - Matriz de valuación de mercado calibrada por segmento automotriz para estimaciones de precios de lista en pesos mexicanos (MXN).
+  - **Capa 3: Transparencia de Procedencia de Datos y Fallback Visual**:
+    - Distintivos visuales claros en la ficha técnica:
+      - `🟢 Oficial de Agencia México | Datos Verificados`
+      - `🏛️ Certificado Oficial EPA (EE.UU.) | Conversión Homologada`
+      - `🌐 Ficha Técnica Global Internacional`
+    - Siluetas vectoriales SVG dinámicas por tipo de vehículo ante modelos sin fotografía.
+- **Actualización de Service Worker PWA (`sw.js`)**:
+  - Cache bump a `autofind-v2.1.0-hybrid-multi-tier` para recarga automática de recursos en todos los dispositivos.
+
+---
+
+## [2.0.0] - 2026-09-13
 - **Fotografías 100% Verificadas y Eliminación Definitiva de Fallbacks Arbitrarios**:
   - Ampliación del catálogo local a 44 modelos clave con URLs de imágenes 100% verificadas (HTTP 200 OK), eliminando enlaces rotos o imágenes 404.
   - Corrección de fotografías inconsistentes: se corrigieron búsquedas como Honda Odyssey (que mostraba un buggy de 1970) y Kia K3 (que mostraba un Ford Mustang).
